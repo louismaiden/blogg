@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Post on Arthur Dent</title>
+    <link>/post/</link>
+    <description>Recent content in Post on Arthur Dent</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 25 Feb 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>new blog location</title>
+      <link>/post/new-blog-location/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/new-blog-location/</guid>
+      <description>Hey AllI have a few new ideas for little data projects and will be posting here from now on. Eventually this will be louismaiden.com.
+Louis</description>
+    </item>
+    
+  </channel>
+</rss>

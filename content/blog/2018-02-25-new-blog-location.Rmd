@@ -1,0 +1,15 @@
+---
+title: new blog location
+author: ''
+date: '2018-02-25'
+slug: new-blog-location
+categories: []
+tags: []
+---
+
+Hey All -
+
+I have a few new ideas for little data projects and will be posting here from now on. Eventually this will be louismaiden.com.
+
+
+- Louis
