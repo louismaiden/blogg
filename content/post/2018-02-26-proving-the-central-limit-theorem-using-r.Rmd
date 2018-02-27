@@ -15,11 +15,10 @@ For those interested in statistical inference, the Central Limit Theorem is one 
 
 Much of what we do in statistics lies on assumptions of normal distributions. 
 
-
 We'll begin by defining the number of repeitions (r) and draws per repitition (c), and writing a function to take the row averages of a matrix
 
 ```{r, warning = FALSE, message = FALSE}
-r <- 1000
+r <- 10
 n <- 50
 
 sample.means <- function(samps, r, n) {
@@ -40,8 +39,11 @@ library(ggplot2)
 library(gridExtra)
 library(plotly)
 
-p1 <- ggplotly(qplot(samps, geom = "histogram", bins = 30, main = "Sample Histogram"))
-p2 <- ggplotly(qplot(samp.means, geom = "histogram", bins = 30, main = "Sample Mean Histogram"))
+sample <- qplot(samps, geom = "histogram", bins = 30, main = "Sample Histogram")
+sample_means <- qplot(samp.means, geom = "histogram", bins = 30, main = "Sample Mean Histogram")
+
+p1 <- ggplotly(sample)
+p2 <- ggplotly(sample_means)
 
 subplot(p1, p2)
 
