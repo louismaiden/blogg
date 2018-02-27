@@ -6,8 +6,8 @@ languageCode        = "en-US"
 layoutdir           = "layouts"
 publishdir          = "public"
 theme = "cocoa-hugo-theme"
-author              = "Arthur Dent"
-title               = "Arthur Dent"
+author              = "Louis Maiden"
+title               = "Louis Maiden"
 pygmentsuseclasses  = true
 disqusshortname     = "cocoaexamplesite" # Comment out to disable Disqus.
 pluralizelisttitles = false
@@ -72,7 +72,7 @@ gitalk_repo            = "your repo url"
 gitalk_owner           = "the owner of this repo"
 gitalk_admin           = ['a', 'list', 'of', 'administrator']
 
-avatar                 = "img/profile.png" # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
+avatar                 = "img/lm.png" # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
 # gravatar             = ""                # gravatar hash. see https://en.gravatar.com/site/implement/hash/. do not use in the same time as avatar
 
 # The following are DEPRECATED.
