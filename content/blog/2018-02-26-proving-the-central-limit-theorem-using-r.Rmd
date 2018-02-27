@@ -9,13 +9,19 @@ tags: []
 
 # Proving the Central Limit Theorem using R
 
-I came across a 
+*Mastering Metrics* by Joshua D. Angrist & John-Steffen Pischke provides a wonderful explanation of the Central Limit Theorem illustrated by a dummy variable indicating sick vs healthy individuals, the latter who account for 80% of a population:
+
+
+> The distribution of this dummy variable has two spikes, one of height .8 at the value 1 and one of height .2 at the value 0. The CLT tells us that with enough data, the distribution of the t-statistic is smooth and bell-shaped even though the distribution of the underlying data has only two values.
+
+
 For those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I'll explain it in basic language and provide a simple way of simulating it using R.
 
-We'll begin by defining the number of repeitions (r) and draws per repitition (c), and writing a function to take the row averages of a matrix
+
+We'll begin by defining the number of repeitions,``r`, and draws per repitition, `n`, and writing a function to take the row averages of a matrix
 
 ```{r, warning = FALSE, message = FALSE}
-r <- 10
+r <- 150
 n <- 50
 
 sample.means <- function(samps, r, n) {
@@ -23,12 +29,14 @@ sample.means <- function(samps, r, n) {
 }
 ```
 
+
 Next we simulate random draws from the distribution described by Mastering Metrics, and call our function on these draws
 ```{r, warning = FALSE, message = FALSE}
-set.seed(100)
+set.seed(1000)
 samps <- rbinom(r*n, size = 1, prob = .8)
 samp.means <- sample.means(samps, r, n)
 ```
+
 
 All we have to do now is plot the results and voila:
 ```{r, warning = FALSE, message = FALSE}
@@ -47,3 +55,27 @@ subplot(p1, p2)
 ```
 
 
+On the left we see the dummy variable as might expect, with around 20% of observations 0 and around 80% at 1. The left hand side doesn't quite resemble the standard normal promised by the Central Limit Theorem, so we increase the sample and try again.
+
+```{r, warning = FALSE, message = FALSE}
+r <- 1500
+n <- 500
+
+samps <- rbinom(r*n, size = 1, prob = .8)
+samp.means <- sample.means(samps, r, n)
+
+sample <- qplot(samps, geom = "histogram", bins = 30, main = "")
+sample_means <- qplot(samp.means, geom = "histogram", bins = 30, main = "")
+
+p1 <- ggplotly(sample)
+p2 <- ggplotly(sample_means)
+
+subplot(p1, p2)
+```
+
+
+This time, the right hand side starts to really resemble the distribution we're looking for. Note that the mean is centered around 0, and with a bit of creative thinking you get to sd = 1 as well.
+
+That's all for now!
+
+- Louis
