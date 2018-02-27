@@ -6,10 +6,21 @@
     <description>Recent content in Post on Louis Maiden</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 25 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Proving the Central Limit Theorem using R</title>
+      <link>/post/proving-the-central-limit-theorem-using-r/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/proving-the-central-limit-theorem-using-r/</guid>
+      <description>Proving the Central Limit Theorem using RFor those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I’ll explain it in basic language and provide a simple way of simulating it using R.
+Why is this important?Much of what we do in statistics lies on assumptions of normal distributions.
+We’ll begin by defining the number of repeitions (r) and draws per repitition (c), and writing a function to take the row averages of a matrix</description>
+    </item>
     
     <item>
       <title>new blog location</title>
