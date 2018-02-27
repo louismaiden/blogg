@@ -35,7 +35,7 @@ samp.means <- sample.means(samps, r, n)
 ```
 
 All we have to do now is plot the results and voila:
-```{r, warnings = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE}
 library(ggplot2)
 library(gridExtra)
 library(plotly)
