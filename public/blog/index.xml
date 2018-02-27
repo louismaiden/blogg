@@ -17,8 +17,7 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/proving-the-central-limit-theorem-using-r/</guid>
-      <description>Proving the Central Limit Theorem using RFor those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I’ll explain it in basic language and provide a simple way of simulating it using R.
-Why is this important?Much of what we do in statistics lies on assumptions of normal distributions.
+      <description>Proving the Central Limit Theorem using RI came across a For those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I’ll explain it in basic language and provide a simple way of simulating it using R.
 We’ll begin by defining the number of repeitions (r) and draws per repitition (c), and writing a function to take the row averages of a matrix</description>
     </item>
     

@@ -9,11 +9,8 @@ tags: []
 
 # Proving the Central Limit Theorem using R
 
+I came across a 
 For those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I'll explain it in basic language and provide a simple way of simulating it using R.
-
-### Why is this important?
-
-Much of what we do in statistics lies on assumptions of normal distributions. 
 
 We'll begin by defining the number of repeitions (r) and draws per repitition (c), and writing a function to take the row averages of a matrix
 
@@ -39,8 +36,8 @@ library(ggplot2)
 library(gridExtra)
 library(plotly)
 
-sample <- qplot(samps, geom = "histogram", bins = 30, main = "Sample Histogram")
-sample_means <- qplot(samp.means, geom = "histogram", bins = 30, main = "Sample Mean Histogram")
+sample <- qplot(samps, geom = "histogram", bins = 30, main = "")
+sample_means <- qplot(samp.means, geom = "histogram", bins = 30, main = "")
 
 p1 <- ggplotly(sample)
 p2 <- ggplotly(sample_means)
