@@ -17,8 +17,9 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/proving-the-central-limit-theorem-using-r/</guid>
-      <description>Proving the Central Limit Theorem using RMastering Metrics by Joshua D. Angrist &amp;amp; John-Steffen Pischke provides a wonderful explanation of the Central Limit Theorem illustrated by a dummy variable indicating sick vs healthy individuals, the latter who account for 80% of a population:
-The distribution of this dummy variable has two spikes, one of height .8 at the value 1 and one of height .</description>
+      <description>Simulating the Central Limit Theorem using RWhat is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
+If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.</description>
     </item>
     
     <item>
@@ -27,8 +28,9 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/proving-the-central-limit-theorem-using-r/</guid>
-      <description>Proving the Central Limit Theorem using RMastering Metrics by Joshua D. Angrist &amp;amp; John-Steffen Pischke provides a wonderful explanation of the Central Limit Theorem illustrated by a dummy variable indicating sick vs healthy individuals, the latter who account for 80% of a population:
-The distribution of this dummy variable has two spikes, one of height .8 at the value 1 and one of height .</description>
+      <description>Simulating the Central Limit Theorem using RWhat is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
+If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.</description>
     </item>
     
     <item>

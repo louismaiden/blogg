@@ -7,38 +7,45 @@ categories: []
 tags: []
 ---
 
-# Proving the Central Limit Theorem using R
+# Simulating the Central Limit Theorem using R
 
-*Mastering Metrics* by Joshua D. Angrist & John-Steffen Pischke provides a wonderful explanation of the Central Limit Theorem illustrated by a dummy variable indicating sick vs healthy individuals, the latter who account for 80% of a population:
+## What is the central limit theorem?
 
+Perhaps the most important concept in statistical inference. It gives us two primary insights:
 
-> The distribution of this dummy variable has two spikes, one of height .8 at the value 1 and one of height .2 at the value 0. The CLT tells us that with enough data, the distribution of the t-statistic is smooth and bell-shaped even though the distribution of the underlying data has only two values.
+* If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
 
+* If a variable's distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.
 
-For those interested in statistical inference, the Central Limit Theorem is one of the most important concepts to understand beyond mere recognition. Here I'll explain it in basic language and provide a simple way of simulating it using R.
+## Why is it important?
 
+Normality assumptions arise frequently in statistics and econometrics: hypothesis testing relies on a normaly distributed sampling distribution to allow us to know the likelihood of a particular test statistic occuring (i.e. the basis of [statistical significance](https://en.wikipedia.org/wiki/Statistical_significance)). General linear models require normally distributed residuals. The list goes on.
 
-We'll begin by defining the number of repeitions,``r`, and draws per repitition, `n`, and writing a function to take the row averages of a matrix
+The goal of this post is to replicate the process of drawing repeated samples from a population with underlying non-normal distribution of our choosing, as a simplified version of this great [stack overflow response](https://stackoverflow.com/questions/40307510/central-limit-theorem-in-r). 
+
+We'll take `t` trials of size `n` and store them in a matrix, then calculate the mean of each trial in a function as such:
 
 ```{r, warning = FALSE, message = FALSE}
-r <- 150
-n <- 50
-
-sample.means <- function(samps, r, n) {
-  rowMeans(matrix(samps, nrow = r, ncol = n))
+sample.means <- function(samps, t, n) {
+  rowMeans(matrix(samps, nrow = t, ncol = n))
 }
 ```
 
+Our underlying distribution will take on values of one 80% of the time and zero 20% of the time - quite far from normality.
 
-Next we simulate random draws from the distribution described by Mastering Metrics, and call our function on these draws
+After using `set.seed()` to ensure reproducibility, we define `t` and `n` with some "low" values. The rbinom function will return random draws of 1 according to our defined probabililty, which we store in `samps`. Finally, we use our samp.means function above to calculate the average of each trial, giving us a total of `t` sample means.
 ```{r, warning = FALSE, message = FALSE}
 set.seed(1000)
-samps <- rbinom(r*n, size = 1, prob = .8)
-samp.means <- sample.means(samps, r, n)
+
+t <- 150
+n <- 50
+
+samps <- rbinom(t*n, size = 1, prob = .8)
+samp.means <- sample.means(samps, t, n)
 ```
 
-
-All we have to do now is plot the results and voila:
+All we have to do now is plot histograms of the underlying data `samps` and the sample means `samp.means`, and voila:
+\newline
 ```{r, warning = FALSE, message = FALSE}
 library(ggplot2)
 library(gridExtra)
@@ -55,14 +62,14 @@ subplot(p1, p2)
 ```
 
 
-On the left we see the dummy variable as might expect, with around 20% of observations 0 and around 80% at 1. The left hand side doesn't quite resemble the standard normal promised by the Central Limit Theorem, so we increase the sample and try again.
+On the left, the dummy appears as we expect with around 20% of observations at 0 and about 80% at 1. The right hand side shows the distribution of sample means, which is a bit too skewed to be considered normal. As per the CLT, let's ramp up the size of `t` & `n` and see what happens.
 
 ```{r, warning = FALSE, message = FALSE}
-r <- 1500
+t <- 1500
 n <- 500
 
-samps <- rbinom(r*n, size = 1, prob = .8)
-samp.means <- sample.means(samps, r, n)
+samps <- rbinom(t*n, size = 1, prob = .8)
+samp.means <- sample.means(samps, t, n)
 
 sample <- qplot(samps, geom = "histogram", bins = 30, main = "")
 sample_means <- qplot(samp.means, geom = "histogram", bins = 30, main = "")
@@ -74,7 +81,12 @@ subplot(p1, p2)
 ```
 
 
-This time, the right hand side starts to really resemble the distribution we're looking for. Note that the mean is centered around 0, and with a bit of creative thinking you get to sd = 1 as well.
+With increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the center of this distribution will show that it's centered around our defined mean of .8, thanks to the magic of the central limit theorem.
+
+
+## Limits of the CLT
+
+What can we do if don't have access to a large sample and our distribution of interest is non-normal or unknown? [Bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) is our knight in shining armor here, which will be the subject of a future post.
 
 That's all for now!
 
