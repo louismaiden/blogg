@@ -17,7 +17,7 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/proving-the-central-limit-theorem-using-r/</guid>
-      <description>Simulating the Central Limit Theorem using RWhat is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+      <description>What is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
 If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
 If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.</description>
     </item>
@@ -28,7 +28,7 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/proving-the-central-limit-theorem-using-r/</guid>
-      <description>Simulating the Central Limit Theorem using RWhat is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+      <description>What is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
 If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
 If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.</description>
     </item>

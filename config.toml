@@ -42,19 +42,14 @@ author                 = "Louis Maiden"
 cachebuster            = true                          # add the current unix timestamp in query string for cache busting css assets
 dateform               = "Jan 2, 2006"
 dateformfull           = "Mon Jan 2 2006 15:04:05 MST"
-description            = "Don't panic"
-email                  = "you@example.space"
+description            = "louismaiden"
+email                  = "lmaiden@hbs.edu"
 extracssfiles          = [ "/css/override.css" ]       # In your `static` directory, add/remove files as necessary.
-faviconfile            = "img/leaf.ico"
-github                 = "//github.com/you"
-instagram              = "//instagram.com/you"
-px500                  = "//500px.com/username"
 lang                   = "en"
-linkedin               = "//linkedin.com/in/you"
+linkedin               = "https://www.linkedin.com/in/louis-maiden-37446525/"
 noshowreadtime         = false                         # if true, don't show "<x> minutes read" in posts
 selfintro              = ""                            # appears in the site header when set to a non-empty string
 twitter                = "//twitter.com/you"
-mastodon               = "//example.com/@you"
 
 highlightjs            = true
 # highlightjslanguages = ["go"]                        # additional languages not included in the "common" set
@@ -72,7 +67,7 @@ gitalk_repo            = "your repo url"
 gitalk_owner           = "the owner of this repo"
 gitalk_admin           = ['a', 'list', 'of', 'administrator']
 
-avatar                 = "img/lm.png" # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
+avatar                 = "img/music_brain.png" # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
 # gravatar             = ""                # gravatar hash. see https://en.gravatar.com/site/implement/hash/. do not use in the same time as avatar
 
 # The following are DEPRECATED.

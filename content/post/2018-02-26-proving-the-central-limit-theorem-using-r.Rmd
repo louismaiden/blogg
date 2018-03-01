@@ -7,8 +7,6 @@ categories: []
 tags: []
 ---
 
-# Simulating the Central Limit Theorem using R
-
 ## What is the central limit theorem?
 
 Perhaps the most important concept in statistical inference. It gives us two primary insights:
@@ -17,13 +15,15 @@ Perhaps the most important concept in statistical inference. It gives us two pri
 
 * If a variable's distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.
 
-## Why is it important?
+## Why is this important?
 
-Normality assumptions arise frequently in statistics and econometrics: hypothesis testing relies on a normaly distributed sampling distribution to allow us to know the likelihood of a particular test statistic occuring (i.e. the basis of [statistical significance](https://en.wikipedia.org/wiki/Statistical_significance)). General linear models require normally distributed residuals. The list goes on.
+Normality assumptions arise frequently in statistics and econometrics. Hypothesis testing relies on a normally distributed sampling distribution to allow us to know the likelihood of a particular test statistic occuring (aka the basis of [statistical significance](https://en.wikipedia.org/wiki/Statistical_significance)). General linear models require normally distributed residuals. Etc etc etc.
 
-The goal of this post is to replicate the process of drawing repeated samples from a population with underlying non-normal distribution of our choosing, as a simplified version of this great [stack overflow response](https://stackoverflow.com/questions/40307510/central-limit-theorem-in-r). 
+## What's our goal?
 
-We'll take `t` trials of size `n` and store them in a matrix, then calculate the mean of each trial in a function as such:
+Our goal here is to replicate the process of drawing repeated samples from a population with underlying non-normal distribution of our choosing, as a simplified version of this great [stack overflow post](https://stackoverflow.com/questions/40307510/central-limit-theorem-in-r). 
+
+We'll begin by taking `t` trials of size `n` and storing them in a matrix, then calculating the mean of each trial in a function as such:
 
 ```{r, warning = FALSE, message = FALSE}
 sample.means <- function(samps, t, n) {
@@ -31,9 +31,9 @@ sample.means <- function(samps, t, n) {
 }
 ```
 
-Our underlying distribution will take on values of one 80% of the time and zero 20% of the time - quite far from normality.
+On average, our underlying distribution will take on values of one 80% of the time and zero 20% of the time - quite far from normality.
 
-After using `set.seed()` to ensure reproducibility, we define `t` and `n` with some "low" values. The rbinom function will return random draws of 1 according to our defined probabililty, which we store in `samps`. Finally, we use our samp.means function above to calculate the average of each trial, giving us a total of `t` sample means.
+After using `set.seed()` to ensure reproducibility, we define `t` and `n` with some "low" values. The rbinom function will return random draws of 1 according to our defined probabililty, which we store in `samps`. Finally, we use our `sample.means` function above to calculate the average of each trial, giving us a total of `t` sample means.
 ```{r, warning = FALSE, message = FALSE}
 set.seed(1000)
 
@@ -61,7 +61,6 @@ subplot(p1, p2)
 
 ```
 
-
 On the left, the dummy appears as we expect with around 20% of observations at 0 and about 80% at 1. The right hand side shows the distribution of sample means, which is a bit too skewed to be considered normal. As per the CLT, let's ramp up the size of `t` & `n` and see what happens.
 
 ```{r, warning = FALSE, message = FALSE}
@@ -80,14 +79,13 @@ p2 <- ggplotly(sample_means)
 subplot(p1, p2)
 ```
 
+With increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the center of this distribution will show its center around our defined mean of .8, thanks to the magic of the central limit theorem.
 
-With increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the center of this distribution will show that it's centered around our defined mean of .8, thanks to the magic of the central limit theorem.
 
+## Small Samples?
 
-## Limits of the CLT
+What can we do if *don't* have access to a large sample and our distribution of interest is non-normal or unknown? [Bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) is our knight in shining armor here, which will be the subject of a future post.
 
-What can we do if don't have access to a large sample and our distribution of interest is non-normal or unknown? [Bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) is our knight in shining armor here, which will be the subject of a future post.
-
-That's all for now!
+That's all for now.
 
 - Louis

@@ -5,14 +5,8 @@ title = "About"
 
 +++
 
-Along with [Ford Prefect](https://en.wikipedia.org/wiki/Ford_Prefect_\(character\)), Dent barely escapes the Earth's destruction as it is demolished to make way for a *hyperspace bypass*. Arthur spends the next several years, still wearing his dressing gown, helplessly launched from crisis to crisis while trying to straighten out his lifestyle. 
+I'm a researcher at Harvard Business School under William Kerr and Ramana Nanda. Our research focuses on entrepreneurship and its policy implications.
 
-> He rather enjoys tea, but seems to have trouble obtaining it in the far reaches of the galaxy. 
+Personal interests include economic development, political economy, public policy, econometrics, machine learnings, statistical computing, skateboarding, music, tennis, Paris, pizza, and so on.
 
-In time, he learns how to fly and carves a niche for himself as a sandwich-maker.
-
-<img src="//placehold.it/300x300" class="profile">
-
-<br />
-
-[About this site](colophon/)
+You can reach me at lmaiden@hbs.edu.
