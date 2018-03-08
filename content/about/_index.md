@@ -5,8 +5,8 @@ title = "About"
 
 +++
 
-I'm a researcher at Harvard Business School under William Kerr and Ramana Nanda. Our research focuses on entrepreneurship and its policy implications.
+Louis Maiden a researcher at Harvard Business School under William Kerr and Ramana Nanda. Our research focuses on entrepreneurship and its policy implications.
 
 Personal interests include economic development, political economy, public policy, econometrics, machine learnings, statistical computing, skateboarding, music, tennis, Paris, pizza, and so on.
 
-You can reach me at lmaiden@hbs.edu.
+Reachable at lmaiden@hbs.edu.

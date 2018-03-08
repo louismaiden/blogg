@@ -17,13 +17,13 @@ Perhaps the most important concept in statistical inference. It gives us two pri
 
 ## Why is this important?
 
-Normality assumptions arise frequently in statistics and econometrics. Hypothesis testing relies on a normally distributed sampling distribution to allow us to know the likelihood of a particular test statistic occuring (aka the basis of [statistical significance](https://en.wikipedia.org/wiki/Statistical_significance)). General linear models require normally distributed residuals. Etc etc etc.
+Normality assumptions arise frequently in statistics and econometrics. Hypothesis testing relies on a normally distributed sampling distribution to allow us to know the likelihood of a particular test statistic occuring. General linear models require normally distributed residuals. Etc etc etc.
 
 ## What's our goal?
 
-Our goal here is to replicate the process of drawing repeated samples from a population with underlying non-normal distribution of our choosing, as a simplified version of this great [stack overflow post](https://stackoverflow.com/questions/40307510/central-limit-theorem-in-r). 
+Our goal here is to replicate the process of drawing repeated samples from a population with underlying non-normal distribution of our choosing, as a simplified version of this great stack overflow [post](https://stackoverflow.com/questions/40307510/central-limit-theorem-in-r). 
 
-We'll begin by taking `t` trials of size `n` and storing them in a matrix, then calculating the mean of each trial in a function as such:
+We take `t` trials of size `n` and store them in a matrix, then calculate the mean of each trial (i.e. row) in a function as such:
 
 ```{r, warning = FALSE, message = FALSE}
 sample.means <- function(samps, t, n) {
@@ -33,7 +33,7 @@ sample.means <- function(samps, t, n) {
 
 On average, our underlying distribution will take on values of one 80% of the time and zero 20% of the time - quite far from normality.
 
-After using `set.seed()` to ensure reproducibility, we define `t` and `n` with some "low" values. The rbinom function will return random draws of 1 according to our defined probabililty, which we store in `samps`. Finally, we use our `sample.means` function above to calculate the average of each trial, giving us a total of `t` sample means.
+After using `set.seed()` with an arbitrary number to ensure reproducibility, we define `t` and `n` with some "low" values. The `rbinom()` function will return random draws of 1 and 0 according to our defined probabilities, which we store in `samps`. Finally, we use our `sample.means` function above to calculate the average of each trial, for a total of `t` sample means.
 ```{r, warning = FALSE, message = FALSE}
 set.seed(1000)
 
@@ -44,7 +44,7 @@ samps <- rbinom(t*n, size = 1, prob = .8)
 samp.means <- sample.means(samps, t, n)
 ```
 
-All we have to do now is plot histograms of the underlying data `samps` and the sample means `samp.means`, and voila:
+All that remains is to plot histograms of the underlying data `samps` and the sample means `samp.means`, and voila:
 \newline
 ```{r, warning = FALSE, message = FALSE}
 library(ggplot2)
@@ -61,7 +61,7 @@ subplot(p1, p2)
 
 ```
 
-On the left, the dummy appears as we expect with around 20% of observations at 0 and about 80% at 1. The right hand side shows the distribution of sample means, which is a bit too skewed to be considered normal. As per the CLT, let's ramp up the size of `t` & `n` and see what happens.
+On the left the dummy appears as we expect, with around 20% of observations at 0 and about 80% at 1. The right hand side shows the distribution of sample means, which is a bit too skewed to be considered normal. As per the CLT, let's ramp up the size of `t` & `n` and see what happens.
 
 ```{r, warning = FALSE, message = FALSE}
 t <- 1500
@@ -79,12 +79,12 @@ p2 <- ggplotly(sample_means)
 subplot(p1, p2)
 ```
 
-With increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the center of this distribution will show its center around our defined mean of .8, thanks to the magic of the central limit theorem.
+With the increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the middle of this distribution will show its center around our defined mean of .8, thanks to the magic of the central limit theorem.
 
 
 ## Small Samples?
 
-What can we do if *don't* have access to a large sample and our distribution of interest is non-normal or unknown? [Bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) is our knight in shining armor here, which will be the subject of a future post.
+What can we do if don't have access to a large sample and our distribution of interest is non-normal or unknown? [Bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) is our knight in shining armor here, which will be the subject of a future post.
 
 That's all for now.
 
