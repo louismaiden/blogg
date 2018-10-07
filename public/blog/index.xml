@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>new post test</title>
+      <link>/blog/new-post-test/</link>
+      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/new-post-test/</guid>
+      <description>THIS IS A TESTTEST</description>
+    </item>
+    
+    <item>
       <title>Proving the Central Limit Theorem using R</title>
       <link>/blog/proving-the-central-limit-theorem-using-r/</link>
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>

@@ -6,10 +6,28 @@
     <description>Recent content on Louis Maiden</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 06 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>new post test</title>
+      <link>/blog/new-post-test/</link>
+      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/new-post-test/</guid>
+      <description>THIS IS A TESTTEST</description>
+    </item>
+    
+    <item>
+      <title>new post test</title>
+      <link>/post/new-post-test/</link>
+      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/new-post-test/</guid>
+      <description>THIS IS A TESTTEST</description>
+    </item>
     
     <item>
       <title>Proving the Central Limit Theorem using R</title>
