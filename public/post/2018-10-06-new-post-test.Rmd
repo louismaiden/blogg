@@ -10,4 +10,4 @@ tags:
 
 # Chart-topping songs are getting more depressing over time
 
-Feeling down lately? It could be the music you're listening to
+Feeling down lately? It could be the music you're listening to.
