@@ -1,10 +1,13 @@
 ---
-title: Popular Music Is Getting More Depressing Over Time
+title: "Popular Music Is Getting More Depressing Over Time"
 author: ''
 date: '2018-10-09'
+output:
+  html_document:
+    df_print: paged
 slug: popular-music-is-getting-more-depressing-over-time
-categories: []
 tags: []
+categories: []
 ---
 
 
@@ -14,32 +17,23 @@ Feeling down lately? It could be the music you're listening to.
 
 
 ```{r, echo = FALSE, warning = FALSE, message=FALSE}
-library(tidyverse)
-#devtools::install_github('charlie86/spotifyr')
-library(spotifyr)
+library(dplyr)
 library(ggplot2)
-library(httr)
-library(rvest)
 library(hrbrthemes)
-library(ggthemes)
-library(extrafontdb)
-library(extrafont)
-#devtools::install_github("jbkunst/highcharter")
+library(plotly)
 library(highcharter)
-#library(githubinstall)
-#gh_install_packages("ggplot2", ref = "49619b7", dependencies = FALSE)
 library(moderndive)
-```
-
-
-
-
-```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 
 lm <- lm(valence ~ release_year, data = tracks_subset)
 summary(lm)
+```
+
+# Interactive Graph
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
 avg_line <- get_regression_points(lm) %>% 
   rename(x = release_year, y = valence_hat) %>% 
   select(x,y)
@@ -54,7 +48,7 @@ tracks2 <- tracks_subset %>%
                           '<br><b>Valence:</b> ', valence)
          ) %>% ungroup()
 
-hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence,)) %>% 
+hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>% 
   hc_tooltip(formatter = JS(paste0("function() {return this.point.tooltip;}")), useHTML = T) %>% 
   hc_add_series(data = avg_line, type = 'line', color = 'black') %>%
   hc_colors('lightgrey') %>%
@@ -66,3 +60,23 @@ hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence,)) %>%
 
 
 ```
+
+# Lowess Curve
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+
+p1 <- tracks_subset %>% 
+  ggplot(aes(release_year, valence)) +
+  geom_smooth() +
+  geom_point(aes(text = paste0("\"", track_name, "\"", " by ", artist_name)),alpha = .1) +
+  theme_ipsum_rc() +
+  theme(panel.grid = element_blank()) +
+  labs(title = "Song Valence for Entire Period",
+         subtitle = "1960 - 2018")
+
+ggplotly(p1)
+
+
+```
+
