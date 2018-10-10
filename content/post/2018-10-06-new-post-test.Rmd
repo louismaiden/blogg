@@ -11,3 +11,58 @@ tags:
 # Chart-topping songs are getting more depressing over time
 
 Feeling down lately? It could be the music you're listening to.
+
+
+```{r, echo = FALSE, warning = FALSE, message=FALSE}
+library(tidyverse)
+#devtools::install_github('charlie86/spotifyr')
+library(spotifyr)
+library(ggplot2)
+library(httr)
+library(rvest)
+library(hrbrthemes)
+library(ggthemes)
+library(extrafontdb)
+library(extrafont)
+#devtools::install_github("jbkunst/highcharter")
+library(highcharter)
+#library(githubinstall)
+#gh_install_packages("ggplot2", ref = "49619b7", dependencies = FALSE)
+library(moderndive)
+```
+
+
+
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+load("C:/Users/nyulo/Documents/R/blogg/top100")
+
+lm <- lm(valence ~ release_year, data = tracks)
+summary(lm)
+avg_line <- get_regression_points(lm) %>% 
+  rename(x = release_year, y = valence_hat) %>% 
+  select(x,y)
+
+tracks2 <- tracks %>% 
+  filter(!is.na(release_year)) %>% 
+  mutate(decade = release_year - release_year %% 10) %>%
+  rowwise %>% 
+  mutate(tooltip = paste0('<b>Artist:</b> ', artist_name,
+                          '<br><b>Track:</b> ', track_name,
+                          '<br><b>Album:</b> ', album_name,
+                          '<br><b>Valence:</b> ', valence)
+         ) %>% ungroup()
+
+hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence,)) %>% 
+  hc_tooltip(formatter = JS(paste0("function() {return this.point.tooltip;}")), useHTML = T) %>% 
+  hc_add_series(data = avg_line, type = 'line', color = 'black') %>%
+  hc_colors('lightgrey') %>%
+  hc_xAxis(max = 2018, min = 1960, title = list(text = '')) %>% 
+  hc_yAxis(max = 1, title = list(text = 'Valence')) %>% 
+  hc_title(text = 'Chart-topping Songs Are Getting More Depressing Over Time') %>% 
+  hc_subtitle(text = '(1960 - 2018)') %>% 
+  hc_add_theme(hc_theme_smpl())
+
+
+```
