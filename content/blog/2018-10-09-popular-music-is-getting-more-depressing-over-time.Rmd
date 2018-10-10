@@ -16,7 +16,7 @@ categories: []
 Feeling down lately? It could be the music you're listening to.
 
 
-```{r, echo = FALSE, warning = FALSE, message=FALSE}
+```{r results='asis', echo=FALSE, include=FALSE,}
 library(dplyr)
 library(ggplot2)
 library(hrbrthemes)
@@ -25,7 +25,9 @@ library(highcharter)
 library(moderndive)
 
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
+```
 
+```{r results='asis', echo=FALSE, include=FALSE,}
 lm <- lm(valence ~ release_year, data = tracks_subset)
 summary(lm)
 ```

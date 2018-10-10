@@ -18,7 +18,7 @@
       
       <guid>/blog/popular-music-is-getting-more-depressing-over-time/</guid>
       <description>Chart-topping songs are getting more depressing over timeFeeling down lately? It could be the music you’re listening to.
-## ## Call:## lm(formula = valence ~ release_year, data = tracks_subset)## ## Residuals:## Min 1Q Median 3Q Max ## -0.</description>
+Interactive Graph{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Chart-topping Songs Are Getting More Depressing Over Time&#34;</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@
       
       <guid>/post/popular-music-is-getting-more-depressing-over-time/</guid>
       <description>Chart-topping songs are getting more depressing over timeFeeling down lately? It could be the music you’re listening to.
-## ## Call:## lm(formula = valence ~ release_year, data = tracks_subset)## ## Residuals:## Min 1Q Median 3Q Max ## -0.</description>
+Interactive Graph{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Chart-topping Songs Are Getting More Depressing Over Time&#34;</description>
     </item>
     
     <item>
