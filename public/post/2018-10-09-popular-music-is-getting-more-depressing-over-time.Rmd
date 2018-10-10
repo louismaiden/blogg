@@ -27,14 +27,11 @@ library(moderndive)
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 ```
 
-```{r results='asis', echo=FALSE, include=FALSE,}
-lm <- lm(valence ~ release_year, data = tracks_subset)
-summary(lm)
-```
-
 # Interactive Graph
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+lm <- lm(valence ~ release_year, data = tracks_subset)
 
 avg_line <- get_regression_points(lm) %>% 
   rename(x = release_year, y = valence_hat) %>% 
