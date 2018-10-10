@@ -48,7 +48,7 @@ tracks2 <- tracks_subset %>%
                           '<br><b>Valence:</b> ', valence)
          ) %>% ungroup()
 
-hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence,)) %>% 
+hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>% 
   hc_tooltip(formatter = JS(paste0("function() {return this.point.tooltip;}")), useHTML = T) %>% 
   hc_add_series(data = avg_line, type = 'line', color = 'black') %>%
   hc_colors('lightgrey') %>%
