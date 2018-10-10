@@ -6,28 +6,29 @@
     <description>Recent content on Louis Maiden</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sat, 06 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>new post test</title>
-      <link>/blog/new-post-test/</link>
-      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Popular Music Is Getting More Depressing Over Time</title>
+      <link>/blog/popular-music-is-getting-more-depressing-over-time/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/new-post-test/</guid>
-      <description>THIS IS A TESTTEST</description>
+      <guid>/blog/popular-music-is-getting-more-depressing-over-time/</guid>
+      <description>Chart-topping songs are getting more depressing over timeFeeling down lately? It could be the music you’re listening to.
+## ## Call:## lm(formula = valence ~ release_year, data = tracks)## ## Residuals:## Min 1Q Median 3Q Max ## -0.</description>
     </item>
     
     <item>
-      <title>new post test</title>
-      <link>/post/new-post-test/</link>
-      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Popular Music Is Getting More Depressing Over Time</title>
+      <link>/post/popular-music-is-getting-more-depressing-over-time/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/new-post-test/</guid>
+      <guid>/post/popular-music-is-getting-more-depressing-over-time/</guid>
       <description>Chart-topping songs are getting more depressing over timeFeeling down lately? It could be the music you’re listening to.
-</description>
+## ## Call:## lm(formula = valence ~ release_year, data = tracks_subset)## ## Residuals:## Min 1Q Median 3Q Max ## -0.</description>
     </item>
     
     <item>

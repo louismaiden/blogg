@@ -1,10 +1,10 @@
 ---
-title: Popular Music Is Getting More Depressing Over Time
+title: "Popular Music Is Getting More Depressing Over Time"
 author: ''
 date: '2018-10-09'
 slug: popular-music-is-getting-more-depressing-over-time
-categories: []
 tags: []
+categories: []
 ---
 
 
@@ -36,15 +36,15 @@ library(moderndive)
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
-load("C:/Users/nyulo/Documents/R/blogg/top100")
+load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 
-lm <- lm(valence ~ release_year, data = tracks)
+lm <- lm(valence ~ release_year, data = tracks_subset)
 summary(lm)
 avg_line <- get_regression_points(lm) %>% 
   rename(x = release_year, y = valence_hat) %>% 
   select(x,y)
 
-tracks2 <- tracks %>% 
+tracks2 <- tracks_subset %>% 
   filter(!is.na(release_year)) %>% 
   mutate(decade = release_year - release_year %% 10) %>%
   rowwise %>% 

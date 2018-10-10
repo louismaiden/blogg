@@ -12,12 +12,13 @@
     
     
     <item>
-      <title>new post test</title>
-      <link>/blog/new-post-test/</link>
-      <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Popular Music Is Getting More Depressing Over Time</title>
+      <link>/blog/popular-music-is-getting-more-depressing-over-time/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/new-post-test/</guid>
-      <description>THIS IS A TESTTEST</description>
+      <guid>/blog/popular-music-is-getting-more-depressing-over-time/</guid>
+      <description>Chart-topping songs are getting more depressing over timeFeeling down lately? It could be the music you’re listening to.
+## ## Call:## lm(formula = valence ~ release_year, data = tracks)## ## Residuals:## Min 1Q Median 3Q Max ## -0.</description>
     </item>
     
     <item>
