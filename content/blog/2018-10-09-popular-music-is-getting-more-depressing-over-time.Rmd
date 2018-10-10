@@ -1,12 +1,12 @@
 ---
-title: new post test
-author: louis maiden
-date: '2018-10-06'
-slug: new-post-test
+title: Popular Music Is Getting More Depressing Over Time
+author: ''
+date: '2018-10-09'
+slug: popular-music-is-getting-more-depressing-over-time
 categories: []
-tags:
-  - regression
+tags: []
 ---
+
 
 # Chart-topping songs are getting more depressing over time
 
