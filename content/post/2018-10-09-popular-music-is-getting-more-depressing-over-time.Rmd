@@ -1,5 +1,5 @@
 ---
-title: "Chart Topping Songs Have Gotten More Depressing Over Time"
+title: "Chart Topping Songs Have Gotten More Depressing, More Dominant Over Time"
 author: ''
 date: '2018-10-09'
 output:
@@ -41,7 +41,7 @@ tracks2 <- tracks_subset %>%
                           '<br><b>Valence:</b> ', valence)
          ) %>% ungroup()
 
-hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>% 
+hchart(tracks2, 'scatter', hcaes(x = jitter(release_year), y = jitter(valence))) %>% 
   hc_tooltip(formatter = JS(paste0("function() {return this.point.tooltip;}")), useHTML = T) %>% 
   hc_add_series(data = avg_line, type = 'line', color = 'black') %>%
   hc_colors('lightgrey') %>%
@@ -56,13 +56,12 @@ hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>%
 \newline
 \newline
 
-The graph above plots Spotify's "valence" metric for each Billboard Hot 100 chart-topping song  over the past half-century. Spotify describes valence as:
+The graph above shows Spotify's "valence" metric for each Billboard Hot 100 chart-topping song over the past half-century. While they don't share details regarding exactly what goes into its calculation, Spotify describes valence as:
 
 >A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
-\newline
-
-For the statistically minded, this simple linear fit is highly significant:
+<br>
+The downward sloping line is a naive linear regression showing that on average, valence is falling over time for chart-toppers. This relationship is highly significant:
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -72,25 +71,55 @@ tidy(lm)
 ```
 
  
+\newline
+\newline
+\newline
+One of the first questions that comes to mind is if this effect is coming from supply side or demand side factors:
+
+* Supply side: Are musicians and producers outputting progressively darker songs?
+
+* Demand side: Are consumers of popular music putting their dollars towards darker songs?
+
+The answer to this question is beyond the scope of this post, but post in the comments if you have any thoughts on what might be driving this trend!
 
 
-## Overall distribution of valence
+For now we'll turn to a few more charts that help tell the story.
+<br>
+<br>
+<br>
 
+
+
+## "Tired Of Hearing About Being In Love"
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
-
-  p1 <- tracks_subset %>% 
-    ggplot(aes(valence)) +
-    geom_histogram(bins = 60) +
+  
+  p3 <- tracks_subset %>% 
+    select(track_name, valence, release_year) %>% 
+    group_by(release_year) %>%
+    mutate(mean_val = mean(valence)) %>%
+    ungroup %>% 
+    ggplot(aes(release_year,valence)) +
+    geom_jitter(alpha = .1) +
+    geom_smooth() +
     theme_ipsum_rc() +
     theme(panel.grid = element_blank()) +
-    labs(title = "Chart-topper Valence For Entire Period",
-         subtitle = "1960 - 2018")
+    labs(title = "Nonlinear Trends In Valence")
   
-  p1
+  p3
 ```
 
-## Valence distributions by decade
+Throughout the 1960's and 1970's, number one hits remained mostly constant regarding their average valence. At the beginning of the 1980's these songs turned markedly darker, a trend that would continue until the late 90's, where things brightened up a bit.
+
+So what occured in the early 1980s that could have led to such a stark change in popular music? Here are some thoughts:
+
+* During this time, advances in instrument technology led to the emergence of electronic music, which rejected the sugar coated dance hits of previous decades. From Wikipedia:
+
+> Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!
+— Juan Atkins, 1988
+
+* For the first time, casette players like Sony's Walkman (1979) allowed for the consumption of music on an individual basis as opposed to group settings. As a result, music became an increasingly more isolated experience, which could have led to a shift towards less upbeat tones.
+
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
@@ -109,29 +138,38 @@ tidy(lm)
   p2
 ```
 
-## Smoothed curve
+Note that from the 60's and 70's to the 80's and 90's, a massive shift occurs in the  
+
+* Chart-toppers from 60's and 70's were overwhelmingly upbeat, likely because these songs tended to be dance hits that were played in clubs.  
+
+* A shift occurs towards darker music beginning in the 80's and fully realized in the 90's. 
+
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
-  
-  p3 <- tracks_subset %>% 
-    select(track_name, valence, release_year) %>% 
-    group_by(release_year) %>%
-    mutate(mean_val = mean(valence)) %>%
-    ungroup %>% 
-    ggplot(aes(release_year,valence)) +
-    geom_jitter(alpha = .1) +
-    geom_smooth() +
-    theme_ipsum_rc() +
+
+tracks2 %>%
+  group_by(release_year) %>% 
+  summarize(n = n()) %>% 
+  ggplot(aes(x = release_year, y = n)) +
+  geom_point() +
+  geom_smooth(method = 'lm')  +
+  theme_ipsum_rc() +
     theme(panel.grid = element_blank()) +
-    labs(title = "Nonparametric Regression")
-  
-  p3
+    labs(title = "Number of Chart Toppers By Year",
+         subtitle = "1960 - 2018", x = "", y = "")
+
+```
+
+This final chart shows that the number of Chart-toppers per year has decreased significantly over time. This is the same as saying that 
+
+* Number 1 hits have greater staying power today than in past years. This could be due to producers and musicians having monopolized popular music
+
+```{r, include = FALSE}
+#servr::daemon_stop("571100792")
 ```
 
 
-Some thoughts:
 
-* Are we being supplied music that is less cheerful, or are we demanding music that is less cheerful?
 
-* 
+
 
