@@ -10,13 +10,14 @@ tags: []
 categories: []
 ---
 
-```{r results='asis', echo=FALSE, include=FALSE,}
+```{r results='asis', echo=FALSE, include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(hrbrthemes)
 library(plotly)
 library(highcharter)
 library(moderndive)
+library(broom)
 
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 ```
@@ -55,32 +56,45 @@ hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>%
 \newline
 \newline
 
-## How can we determine how positive or negative a song is?
-
-Spotify offers information on various song metrics via its API. We're interested in one called "valence", and While they don't disclose the components of how it's calculated, it's described as:
+The graph above plots Spotify's "valence" metric for each Billboard Hot 100 chart-topping song  over the past half-century. Spotify describes valence as:
 
 >A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
 \newline
-The standard for popular music in the US is the Billboard Hot 100, and we'll be considering each #1 track from 1960 to present day. You can hover over any point to show the song / artist / album name, along with its associated valence score:
 
-For the statistically minded, the relationship is highly significant:
+For the statistically minded, this simple linear fit is highly significant:
 
-```{r, message = FALSE, warning = FALSE}
-library(stargazer)
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
 lm <- lm(valence ~ release_year, data = tracks_subset)
-summary(lm)
+tidy(lm)
 
 ```
 
-
-More detail can be seen when we consider decade level distributions:
-
-
-```{r, warning=FALSE, message = FALSE}
+ 
 
 
-  p1 <- tracks_subset %>%
+## Overall distribution of valence
+
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+  p1 <- tracks_subset %>% 
+    ggplot(aes(valence)) +
+    geom_histogram(bins = 60) +
+    theme_ipsum_rc() +
+    theme(panel.grid = element_blank()) +
+    labs(title = "Chart-topper Valence For Entire Period",
+         subtitle = "1960 - 2018")
+  
+  p1
+```
+
+## Valence distributions by decade
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+  p2 <- tracks_subset %>%
     select(track_name, valence, release_year) %>% 
     mutate(decade = release_year - release_year %% 10) %>%
     filter(!is.na(decade)) %>% 
@@ -92,10 +106,28 @@ More detail can be seen when we consider decade level distributions:
     labs(title = "Chart-topper Valence By Decade",
          subtitle = '1960 to Present')
   
-  p1
-
-
+  p2
 ```
+
+## Smoothed curve
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+  
+  p3 <- tracks_subset %>% 
+    select(track_name, valence, release_year) %>% 
+    group_by(release_year) %>%
+    mutate(mean_val = mean(valence)) %>%
+    ungroup %>% 
+    ggplot(aes(release_year,valence)) +
+    geom_jitter(alpha = .1) +
+    geom_smooth() +
+    theme_ipsum_rc() +
+    theme(panel.grid = element_blank()) +
+    labs(title = "Nonparametric Regression")
+  
+  p3
+```
+
 
 Some thoughts:
 

@@ -10,7 +10,7 @@ tags: []
 categories: []
 ---
 
-```{r results='asis', echo=FALSE, include=FALSE,}
+```{r results='asis', echo=FALSE, include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(hrbrthemes)
