@@ -1,5 +1,5 @@
 ---
-title: "Popular Music Is Getting More Depressing Over Time"
+title: "Chart Topping Songs Have Gotten More Depressing Over Time"
 author: ''
 date: '2018-10-09'
 output:
@@ -17,14 +17,10 @@ library(hrbrthemes)
 library(plotly)
 library(highcharter)
 library(moderndive)
+library(broom)
 
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 ```
-
-
-## Feeling down lately? It could be the music you're listening to.
-
-Over the past half-century, popular music has been getting darker.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
@@ -51,32 +47,91 @@ hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>%
   hc_colors('lightgrey') %>%
   hc_xAxis(max = 2018, min = 1960, title = list(text = '')) %>% 
   hc_yAxis(max = 1, title = list(text = 'Valence')) %>% 
-  hc_title(text = 'Chart-topping Songs Are Getting More Depressing Over Time') %>% 
+  hc_title(text = 'Song Valence Over Time') %>% 
   hc_subtitle(text = '(1960 - 2018)') %>% 
   hc_add_theme(hc_theme_smpl())
 
 
 ```
+\newline
+\newline
 
-The graph above shows Billboard Hot 100 hits and a metric calculated by Spotify called "Valence", which they describe as:
+The graph above plots Spotify's "valence" metric for each Billboard Hot 100 chart-topping song  over the past half-century. Spotify describes valence as:
 
->A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with  low valence sound more negative (e.g. sad, depressed, angry).
+>A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
+
+\newline
+
+For the statistically minded, this simple linear fit is highly significant:
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+lm <- lm(valence ~ release_year, data = tracks_subset)
+tidy(lm)
+
+```
+
+ 
+
+
+## Overall distribution of valence
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
-
-p1 <- tracks_subset %>% 
-  ggplot(aes(release_year, valence)) +
-  geom_smooth() +
-  geom_point(aes(text = paste0("\"", track_name, "\"", " by ", artist_name)),alpha = .1) +
-  theme_ipsum_rc() +
-  theme(panel.grid = element_blank()) +
-  labs(title = "Song Valence for Entire Period",
+  p1 <- tracks_subset %>% 
+    ggplot(aes(valence)) +
+    geom_histogram(bins = 60) +
+    theme_ipsum_rc() +
+    theme(panel.grid = element_blank()) +
+    labs(title = "Chart-topper Valence For Entire Period",
          subtitle = "1960 - 2018")
-
-ggplotly(p1)
-
-
+  
+  p1
 ```
+
+## Valence distributions by decade
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+
+  p2 <- tracks_subset %>%
+    select(track_name, valence, release_year) %>% 
+    mutate(decade = release_year - release_year %% 10) %>%
+    filter(!is.na(decade)) %>% 
+    ggplot(aes(valence)) + 
+    geom_density() +
+    facet_wrap(~decade) +
+    theme_ipsum_rc() + 
+    theme(panel.grid = element_blank()) +
+    labs(title = "Chart-topper Valence By Decade",
+         subtitle = '1960 to Present')
+  
+  p2
+```
+
+## Smoothed curve
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+  
+  p3 <- tracks_subset %>% 
+    select(track_name, valence, release_year) %>% 
+    group_by(release_year) %>%
+    mutate(mean_val = mean(valence)) %>%
+    ungroup %>% 
+    ggplot(aes(release_year,valence)) +
+    geom_jitter(alpha = .1) +
+    geom_smooth() +
+    theme_ipsum_rc() +
+    theme(panel.grid = element_blank()) +
+    labs(title = "Nonparametric Regression")
+  
+  p3
+```
+
+
+Some thoughts:
+
+* Are we being supplied music that is less cheerful, or are we demanding music that is less cheerful?
+
+* 
 

@@ -1,5 +1,5 @@
 ---
-title: "Popular Music Is Getting More Depressing Over Time"
+title: "Chart Topping Songs Have Gotten More Depressing Over Time"
 author: ''
 date: '2018-10-09'
 output:
@@ -20,11 +20,6 @@ library(moderndive)
 
 load("C:/Users/nyulo/Documents/R/blogg/tracks_subset")
 ```
-
-
-## Feeling down lately? It could be the music you're listening to.
-
-Over the past half-century, popular music has been getting darker.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
@@ -51,32 +46,60 @@ hchart(tracks2, 'scatter', hcaes(x = release_year, y = valence)) %>%
   hc_colors('lightgrey') %>%
   hc_xAxis(max = 2018, min = 1960, title = list(text = '')) %>% 
   hc_yAxis(max = 1, title = list(text = 'Valence')) %>% 
-  hc_title(text = 'Chart-topping Songs Are Getting More Depressing Over Time') %>% 
+  hc_title(text = 'Song Valence Over Time') %>% 
   hc_subtitle(text = '(1960 - 2018)') %>% 
   hc_add_theme(hc_theme_smpl())
 
 
 ```
+\newline
+\newline
 
-The graph above shows Billboard Hot 100 hits and a metric calculated by Spotify called "Valence", which they describe as:
+## How can we determine how positive or negative a song is?
 
->A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with  low valence sound more negative (e.g. sad, depressed, angry).
+Spotify offers information on various song metrics via its API. We're interested in one called "valence", and While they don't disclose the components of how it's calculated, it's described as:
+
+>A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
+
+\newline
+The standard for popular music in the US is the Billboard Hot 100, and we'll be considering each #1 track from 1960 to present day. You can hover over any point to show the song / artist / album name, along with its associated valence score:
+
+For the statistically minded, the relationship is highly significant:
+
+```{r, message = FALSE, warning = FALSE}
+library(stargazer)
+lm <- lm(valence ~ release_year, data = tracks_subset)
+summary(lm)
+
+```
 
 
-```{r, echo = FALSE, warning=FALSE, message = FALSE}
+More detail can be seen when we consider decade level distributions:
 
 
-p1 <- tracks_subset %>% 
-  ggplot(aes(release_year, valence)) +
-  geom_smooth() +
-  geom_point(aes(text = paste0("\"", track_name, "\"", " by ", artist_name)),alpha = .1) +
-  theme_ipsum_rc() +
-  theme(panel.grid = element_blank()) +
-  labs(title = "Song Valence for Entire Period",
-         subtitle = "1960 - 2018")
+```{r, warning=FALSE, message = FALSE}
 
-ggplotly(p1)
+
+  p1 <- tracks_subset %>%
+    select(track_name, valence, release_year) %>% 
+    mutate(decade = release_year - release_year %% 10) %>%
+    filter(!is.na(decade)) %>% 
+    ggplot(aes(valence)) + 
+    geom_density() +
+    facet_wrap(~decade) +
+    theme_ipsum_rc() + 
+    theme(panel.grid = element_blank()) +
+    labs(title = "Chart-topper Valence By Decade",
+         subtitle = '1960 to Present')
+  
+  p1
 
 
 ```
+
+Some thoughts:
+
+* Are we being supplied music that is less cheerful, or are we demanding music that is less cheerful?
+
+* 
 
