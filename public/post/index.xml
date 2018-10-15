@@ -20,7 +20,7 @@
       <description>{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Song Valence By Release Year&#34;},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Valence&#34;},&#34;type&#34;:&#34;linear&#34;,&#34;max&#34;:1},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;label&#34;:{&#34;enabled&#34;:false},&#34;turboThreshold&#34;:0,&#34;showInLegend&#34;:false},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;scatter&#34;:{&#34;marker&#34;:{&#34;symbol&#34;:&#34;circle&#34;}}},&#34;series&#34;:[{&#34;group&#34;:&#34;group&#34;,&#34;data&#34;:[{&#34;track_name&#34;:&#34;El Paso&#34;,&#34;artist_name&#34;:&#34;Marty Robbins&#34;,&#34;album_name&#34;:&#34;Gunfighter Ballads And Trail Songs&#34;,&#34;valence&#34;:0.691,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Marty Robbins
 Track: El Paso
 Album: Gunfighter Ballads And Trail Songs
-Valence: 0.691&#34;,&#34;x&#34;:1959.86136504868,&#34;y&#34;:0.690999410432857},{&#34;track_name&#34;:&#34;Running Bear&#34;,&#34;artist_name&#34;:&#34;Johnny Preston&#34;,&#34;album_name&#34;:&#34;Greatest Hits&#34;,&#34;valence&#34;:0.822,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Johnny Preston
+Valence: 0.691&#34;,&#34;x&#34;:1960.16150796013,&#34;y&#34;:0.690978733960446},{&#34;track_name&#34;:&#34;Running Bear&#34;,&#34;artist_name&#34;:&#34;Johnny Preston&#34;,&#34;album_name&#34;:&#34;Greatest Hits&#34;,&#34;valence&#34;:0.822,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Johnny Preston
 Track: Running Bear
 Album: Greatest Hits</description>
     </item>

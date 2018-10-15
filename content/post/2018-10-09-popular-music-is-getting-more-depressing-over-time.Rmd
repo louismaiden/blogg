@@ -67,7 +67,7 @@ The downward sloping line is a naive linear regression (highly statistically sig
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
 lm <- lm(valence ~ release_year, data = tracks_subset)
-tidy(lm)
+tidy(lm) 
 
 ```
 

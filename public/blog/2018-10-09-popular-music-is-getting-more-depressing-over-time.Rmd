@@ -60,20 +60,18 @@ The graph above shows Spotify's "valence" metric for each Billboard Hot 100 char
 
 >A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
-<br>
-
-What we observe is a drop of approximately 17% in terms of average valence between 1960 and 2018.
+Between the years of 1960 and 2018, average valence has fallen by approximately 17%.
 
 The downward sloping line is a naive linear regression (highly statistically significant for those who are wondering):
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
 lm <- lm(valence ~ release_year, data = tracks_subset)
-tidy(lm)
+tidy(lm) 
 
 ```
 
-One of the first questions that comes to mind is if this effect is coming from supply side or demand side factors: are musicians and producers outputting progressively darker hits, or is the public craving darker hits themselves? 
+One of the first questions that comes to mind is if this effect is coming from supply side or demand side factors: are musicians and producers outputting a pool of progressively darker hits, or is the public craving more depressing tones themselves? 
 
 The answer to this question is beyond the scope of this post, but post in the comments if you have any thoughts on what might be driving this trend!
 
@@ -103,14 +101,14 @@ For now we'll turn to a few more charts that help tell the story.
 
 ```
 
-As we can see above, number one hits from the the 1960s and 1970s remained mostly constant regarding their average valence, and at peak levels for our sample period. However, the beginning of the 1980s turned markedly darker, a trend that would continue until the end of the following decade, where things brightened up a bit.
+As can be seen above, chart-toppers from the the 1960s and 1970s remained mostly constant regarding their average valence, and crucially, at peak levels for our sample period. However, the beginning of the 1980s turned markedly darker, a trend that would continue until the end of the following decade, where things brightened up a bit.
 
-What factors could have led to such a stark change in popular music in the early 1980s? This could perhaps be best summed up by quote from Juan Atkins, godfather of techno music:
+What factors could have led to such a stark change in popular music in the early 1980s? This could perhaps be best summed up by quote from Juan Atkins, the godfather of techno music:
 
 > "Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!""
 — Juan Atkins, 1988
 
-This rejection of the sugar coated dance hits of yesteryear was aided by another technological advancement. Casette players like Sony's Walkman (1979) allowed for the consumption of music on an individual basis as opposed to solely in group settings, and as a result, music became an increasingly more isolated experience.
+This rejection of the sugar coated dance hits of yesteryear was aided by another technological advancement: casette players. For the first time, devices like the widly popular Sony Walkman (1979) allowed for the consumption of music on an individual basis as opposed to solely in group settings, and as a result, music became an increasingly less communal experience.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
@@ -128,7 +126,7 @@ tracks_subset %>%
          subtitle = '1960 to Present')
 ```
 
-On a whole, we can see that the valence fallout of the 1980s led the 1990s to be the darkest decade in the years we're considering. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits. 
+On a whole, we can see that the valence fallout of the 1980s led the 1990s to be the darkest decade of the years we're considering. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits. 
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
