@@ -1,5 +1,5 @@
 ---
-title: "Chart Topping Songs Have Gotten More Depressing, More Dominant Over Time"
+title: "Chart-topping Songs Have Gotten More Depressing, More Dominant Over Time"
 author: ''
 date: '2018-10-09'
 output:
@@ -47,7 +47,7 @@ hchart(tracks2, 'scatter', hcaes(x = jitter(release_year), y = jitter(valence)))
   hc_colors('lightgrey') %>%
   hc_xAxis(max = 2018, min = 1960, title = list(text = '')) %>% 
   hc_yAxis(max = 1, title = list(text = 'Valence')) %>% 
-  hc_title(text = 'Song Valence Over Time') %>% 
+  hc_title(text = 'Song Valence By Release Year') %>% 
   hc_subtitle(text = '(1960 - 2018)') %>% 
   hc_add_theme(hc_theme_smpl())
 
@@ -61,7 +61,10 @@ The graph above shows Spotify's "valence" metric for each Billboard Hot 100 char
 >A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
 <br>
-The downward sloping line is a naive linear regression showing that on average, valence is falling over time for chart-toppers. This relationship is highly significant:
+
+What we observe is a drop of approximately 17% in terms of average valence between 1960 and 2018.
+
+The downward sloping line is a naive linear regression (highly statistically significant for those who are wondering):
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -70,18 +73,9 @@ tidy(lm)
 
 ```
 
- 
-\newline
-\newline
-\newline
-One of the first questions that comes to mind is if this effect is coming from supply side or demand side factors:
-
-* Supply side: Are musicians and producers outputting progressively darker songs?
-
-* Demand side: Are consumers of popular music putting their dollars towards darker songs?
+One of the first questions that comes to mind is if this effect is coming from supply side or demand side factors: are musicians and producers outputting progressively darker hits, or is the public craving darker hits themselves? 
 
 The answer to this question is beyond the scope of this post, but post in the comments if you have any thoughts on what might be driving this trend!
-
 
 For now we'll turn to a few more charts that help tell the story.
 <br>
@@ -94,7 +88,7 @@ For now we'll turn to a few more charts that help tell the story.
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
   
-  p3 <- tracks_subset %>% 
+  tracks_subset %>% 
     select(track_name, valence, release_year) %>% 
     group_by(release_year) %>%
     mutate(mean_val = mean(valence)) %>%
@@ -106,24 +100,22 @@ For now we'll turn to a few more charts that help tell the story.
     theme(panel.grid = element_blank()) +
     labs(title = "Nonlinear Trends In Valence")
   
-  p3
+
 ```
 
-Throughout the 1960's and 1970's, number one hits remained mostly constant regarding their average valence. At the beginning of the 1980's these songs turned markedly darker, a trend that would continue until the late 90's, where things brightened up a bit.
+As we can see above, number one hits from the the 1960s and 1970s remained mostly constant regarding their average valence, and at peak levels for our sample period. However, the beginning of the 1980s turned markedly darker, a trend that would continue until the end of the following decade, where things brightened up a bit.
 
-So what occured in the early 1980s that could have led to such a stark change in popular music? Here are some thoughts:
+What factors could have led to such a stark change in popular music in the early 1980s? This could perhaps be best summed up by quote from Juan Atkins, godfather of techno music:
 
-* During this time, advances in instrument technology led to the emergence of electronic music, which rejected the sugar coated dance hits of previous decades. From Wikipedia:
-
-> Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!
+> "Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!""
 — Juan Atkins, 1988
 
-* For the first time, casette players like Sony's Walkman (1979) allowed for the consumption of music on an individual basis as opposed to group settings. As a result, music became an increasingly more isolated experience, which could have led to a shift towards less upbeat tones.
+This rejection of the sugar coated dance hits of yesteryear was aided by another technological advancement. Casette players like Sony's Walkman (1979) allowed for the consumption of music on an individual basis as opposed to solely in group settings, and as a result, music became an increasingly more isolated experience.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
-  p2 <- tracks_subset %>%
+tracks_subset %>%
     select(track_name, valence, release_year) %>% 
     mutate(decade = release_year - release_year %% 10) %>%
     filter(!is.na(decade)) %>% 
@@ -134,20 +126,14 @@ So what occured in the early 1980s that could have led to such a stark change in
     theme(panel.grid = element_blank()) +
     labs(title = "Chart-topper Valence By Decade",
          subtitle = '1960 to Present')
-  
-  p2
 ```
 
-Note that from the 60's and 70's to the 80's and 90's, a massive shift occurs in the  
-
-* Chart-toppers from 60's and 70's were overwhelmingly upbeat, likely because these songs tended to be dance hits that were played in clubs.  
-
-* A shift occurs towards darker music beginning in the 80's and fully realized in the 90's. 
+On a whole, we can see that the valence fallout of the 1980s led the 1990s to be the darkest decade in the years we're considering. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits. 
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
-tracks2 %>%
+tracks_subset %>%
   group_by(release_year) %>% 
   summarize(n = n()) %>% 
   ggplot(aes(x = release_year, y = n)) +
@@ -160,12 +146,14 @@ tracks2 %>%
 
 ```
 
-This final chart shows that the number of Chart-toppers per year has decreased significantly over time. This is the same as saying that 
+This final chart shows that the number of chart-toppers per year has decreased significantly over time, and again the relationship is highly significant. This is the same as saying that 
 
 * Number 1 hits have greater staying power today than in past years. This could be due to producers and musicians having monopolized popular music
 
 ```{r, include = FALSE}
 #servr::daemon_stop("571100792")
+
+#* During this time, advances in instrument technology led to the emergence of #new forms of electronic music, which rejected the sugar coated dance hits of #previous decades. While these underground hits were far from topping charts, #this movement undoubtedly had an effect on music of all varieties. From #Wikipedia:
 ```
 
 
