@@ -48,7 +48,7 @@ tracks_subset %>%
   inner_join(trust_by_year) %>% 
   group_by(release_year) %>% 
   summarize(valence = mean(valence),
-            trust = mean(trust)) %>%
+            trust = mean(trust)) %>% 
   mutate(trust2 = (trust-min(trust))/(max(trust)-min(trust)),
          trust3 = trust / 100) %>% 
   lm(trust2 ~ valence, data = .) %>% 
