@@ -1,5 +1,5 @@
 ---
-title: "Chart-topping Songs Have Gotten More Depressing, More Dominant Over Time"
+title: "Chart-topping Songs Have Gotten More Depressing Over Time"
 author: ''
 date: '2018-10-09'
 output:
@@ -54,19 +54,26 @@ hchart(tracks2, 'scatter', hcaes(x = jitter(release_year), y = jitter(valence)))
 
 ```
 
-The graph above shows Spotify's "valence" metric for each Billboard Hot 100 chart-topping song over the past half-century. While they don't share details regarding exactly what goes into its calculation, Spotify describes valence as:
+## How Can We Determine How Uplifting Or Depressing A Song Is?
+
+The graph above shows Spotify's "valence" metric for each Billboard Hot 100 number one song over the past half-century. Spotify describes valence as:
 
 >A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
-
 <br>
-**Between the years of 1960 and 2018, average valence has fallen by approximately 17%.** The downward sloping line is a naive linear regression of valence on release year, which is highly statistically significant:
+
+Is valence legit? Tough to say as Spotify doesn't reveal its exact calculation, but by hovering over the points above we can see that *Happy* by Pharrell Williams ranks among the happiest songs, while *My Heart Will Go On* by Celine Dion ranks among the saddest. Works for me!
+<br>
+<br>
+
+## What's Happening To #1 Hits Over Time?
+**Between the years of 1960 and 2018, average valence has fallen by approximately 17%.** The downward sloping line in the graph above is a naive linear regression of valence on release year, which is highly statistically significant (p-value = .00000000424):
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 lm <- lm(valence ~ release_year, data = tracks_subset)
 tidy(lm) 
 ```
 
-One of the first questions that arises is if this effect is coming from supply side or demand side factors; are musicians and producers outputting a pool of progressively darker hits, or is the public craving darker tones themselves? 
+One of the first questions that arises is if this effect is coming from supply side or demand side factors; are musicians and producers outputting a pool of progressively darker hits, or is the public craving darker tones themselves? Or both?
 
 The answer to this question is beyond the scope of this post, so for now we'll turn to a few more charts that help tell the story.
 <br>
@@ -74,9 +81,9 @@ The answer to this question is beyond the scope of this post, so for now we'll t
 
 ## "Tired Of Hearing About Being In Love"
 
-While the previous linear model is useful for considering whether falling valence was a trend that beyond mere statistical noise, the non-linear trend below shows greater detail:
+While the previous linear model is useful for considering whether falling valence is a trend that exists beyond mere statistical noise, the non-linear curve below shows greater detail:
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
-  tracks_subset %>% 
+p1 <-  tracks_subset %>% 
     select(track_name, valence, release_year) %>% 
     group_by(release_year) %>%
     mutate(mean_val = mean(valence)) %>%
@@ -86,23 +93,26 @@ While the previous linear model is useful for considering whether falling valenc
     geom_smooth() +
     theme_ipsum_rc() +
     theme(panel.grid = element_blank()) +
-    labs(title = "Song Valence By Release Year: Lowess Fit")
+    labs(title = "Song Valence By Release Year: Lowess Fit",
+         subtitle = "95% Confidence Bands Shown")
+
+ggplotly(p1)
 
 ```
 
-Chart-toppers from the 1960s and 1970s remained mostly constant regarding their average valence, and crucially, at peak levels for our sample period. The beginning of the 1980s turned markedly darker, and didn't rebound until the end of the following decade.
+We can see that chart-toppers from the 1960s and 1970s remained mostly constant regarding their average valence, and crucially, at peak levels for our sample period. The beginning of the 1980s turned markedly darker however, and didn't rebound until the end of the following decade.
 
 What factors could have led to such a stark change in popular music in the early 1980s? Perhaps this could be best summed up by quote from Juan Atkins, the godfather of techno music:
 
 > "Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!""
 — Juan Atkins, 1988
 
-This rejection of the sugar coated dance hits of yesteryear was accompanied by another technological advancement: casette players. For the first time, devices like the widly popular Sony Walkman (1979) allowed for the consumption of music on an individual basis as opposed to solely in group settings, and as a result, music became an increasingly isolated experience.
+This rejection of the sugar coated dance hits of yesteryear was accompanied by another technological advancement: personal casette players. For the first time, devices like the widly popular Sony Walkman (1979) allowed for the consumption of music on an individual basis as opposed to group settings, and as a result, music became an increasingly isolated experience.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 
-tracks_subset %>%
+p2 <- tracks_subset %>%
     select(track_name, valence, release_year) %>% 
     mutate(decade = release_year - release_year %% 10) %>%
     filter(!is.na(decade)) %>% 
@@ -113,9 +123,9 @@ tracks_subset %>%
     theme(panel.grid = element_blank()) +
     labs(title = "Valence Density By Decade",
          subtitle = '1960 to Present')
+
+ggplotly(p2)
 ```
 A series of density plots above tells a similar story, but highlights how the valence fallout of the 1980s led the 1990s to be the darkest decade of the period in consideration. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits.
 
-What does all this mean? While it may seem like culture is getting bleaker, my bet is that this is simply due to a shift away from the sugar coated roots of popular culture towards postmodernist motifs.
-
-Looking forward to learning what your thoughts are on this trend. If you enjoyed the post, leave me a comment or a share and I'll try to post similar things in the future!
+What does all this mean? Evidence of a cultural shift? Let me know your theories in the comments below. If you enjoyed the post, leave me a like or a share and I'll try to post similar things in the future!
