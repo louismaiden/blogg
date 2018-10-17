@@ -47,7 +47,7 @@ email                  = "lmaiden@hbs.edu"
 extracssfiles          = [ "/css/override.css" ]       # In your `static` directory, add/remove files as necessary.
 lang                   = "en"
 linkedin               = "https://www.linkedin.com/in/louis-maiden-37446525/"
-noshowreadtime         = false                         # if true, don't show "<x> minutes read" in posts
+noshowreadtime         = true                         # if true, don't show "<x> minutes read" in posts
 selfintro              = ""                            # appears in the site header when set to a non-empty string
 twitter                = "//twitter.com/you"
 
