@@ -81,7 +81,7 @@ The answer to this question is beyond the scope of this post, so for now we'll t
 
 ## "Tired Of Hearing About Being In Love"
 
-While the previous linear model is useful for considering whether falling valence is a trend that exists beyond mere statistical noise, the non-linear curve below shows greater detail:
+While the previous linear model is useful for considering whether falling valence is a trend that exists beyond mere statistical noise, the non-linear curve below shows greater detail (95% confidence bands shown):
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 p1 <-  tracks_subset %>% 
     select(track_name, valence, release_year) %>% 
@@ -93,8 +93,7 @@ p1 <-  tracks_subset %>%
     geom_smooth() +
     theme_ipsum_rc() +
     theme(panel.grid = element_blank()) +
-    labs(title = "Song Valence By Release Year: Lowess Fit",
-         subtitle = "95% Confidence Bands Shown")
+    labs(title = "Song Valence By Release Year: Lowess Fit")
 
 ggplotly(p1)
 
@@ -121,8 +120,7 @@ p2 <- tracks_subset %>%
     facet_wrap(~decade) +
     theme_ipsum_rc() + 
     theme(panel.grid = element_blank()) +
-    labs(title = "Valence Density By Decade",
-         subtitle = '1960 to Present')
+    labs(title = "Valence Density By Decade")
 
 ggplotly(p2)
 ```
