@@ -120,10 +120,11 @@ p2 <- tracks_subset %>%
     facet_wrap(~decade) +
     theme_ipsum_rc() + 
     theme(panel.grid = element_blank()) +
-    labs(title = "Valence Density By Decade")
+    labs(title = "Valence Density By Decade",
+         x = "", y = "")
 
 ggplotly(p2)
 ```
-A series of density plots above tells a similar story, but highlights how the valence fallout of the 1980s led the 1990s to be the darkest decade of the period in consideration. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits.
+The series of density plots above tells a similar story, but highlights how the valence fallout of the 1980s led the 1990s to be the darkest decade of the period in consideration. And while the 2000s showed signs of a trend reversal, the current decade again peaks in low valence hits.
 
 What does all this mean? Evidence of a cultural shift? Let me know your theories in the comments below. If you enjoyed the post, leave me a like or a share and I'll try to post similar things in the future!
