@@ -81,7 +81,7 @@ The answer to this question is beyond the scope of this post, so for now we'll t
 
 ## "Tired Of Hearing About Being In Love"
 
-While the previous linear model is useful for considering whether falling valence is a trend that exists beyond mere statistical noise, the non-linear curve below shows greater detail (95% confidence bands shown):
+While the previous linear model is useful for considering whether declining valence is a trend that exists beyond mere statistical noise, the non-linear curve below shows greater detail (95% confidence bands shown):
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 p1 <-  tracks_subset %>% 
     select(track_name, valence, release_year) %>% 
