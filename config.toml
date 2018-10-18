@@ -11,7 +11,7 @@ title               = "Louis Maiden"
 pygmentsuseclasses  = true
 disqusshortname     = "cocoaexamplesite" # Comment out to disable Disqus.
 pluralizelisttitles = false
-googleAnalytics     = "UA-123-45"
+googleAnalytics     = "UA-127707555-1"
 
 [permalinks]
 blog  = "blog/:slug/"
@@ -49,7 +49,7 @@ lang                   = "en"
 linkedin               = "https://www.linkedin.com/in/louis-maiden-37446525/"
 noshowreadtime         = true                         # if true, don't show "<x> minutes read" in posts
 selfintro              = ""                            # appears in the site header when set to a non-empty string
-twitter                = "//twitter.com/you"
+twitter                = "https://twitter.com/ljm2174"
 
 highlightjs            = true
 # highlightjslanguages = ["go"]                        # additional languages not included in the "common" set
