@@ -22,44 +22,24 @@ load("C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R")
 ```
 
 
-```{r results='asis', echo=FALSE}
-# ONE HANDED BACKHAND - EXTENDED MODEL
-p1 <- clean %>% 
-  filter(year >= 2000) %>% 
-  group_by(year) %>% 
-  summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
-  ggplot(aes(year, share)) +
-  geom_point(size = 2) +
-  stat_smooth(method = "lm", fullrange = TRUE) +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
-  expand_limits(y = 0) +
-  xlim(c(2000,2030)) +
-  geom_hline(yintercept = 0, linetype = 2) +
-  scale_y_continuous(labels = percent_format()) +
-  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year")
-
-ggplotly(p1)
-```
-
-
-
 ## About The Dataset
 
-# DISTRIBUTION OF MISSING ONE HANDED BACKHANDS OVER TIME
+I scraped ranking data from the [ATP World Tour](https://www.atptour.com/en/rankings/singles) website between the years of 1980 through present day. While I was delighted to see that the player names / rank information was complete, there are a substantial amount of missing values describing what type of backhand a player hit.
+
+As we might expect, it turns out that the older data contains the vast majority of the missings:
 
 ```{r results='asis', echo= TRUE}
 
 p2 <- clean %>% 
   ggplot(aes(year, fill = is.na(one_hander))) +
-  geom_density(alpha = .8) +
-  labs(title = "Distribution of Missing Backhand Method by Year",
-       fill = "Missing")
+  geom_density(alpha = .6) +
+  labs(title = "Distribution of Missing Backhand Type by Year",
+       fill = "Missing?")
 
 ggplotly(p2)
 ```
 
-# ARE THE MISSING BANDHANDS CORRELATED WITH RANK?
+Perhaps more problematic (but again expected), the missing backhand type's are correlated with rank; higher ranked players were less likely to be missing backhand type:
 
 ```{r}
 
@@ -76,6 +56,8 @@ ggplotly(p3)
 ```
 
 # ONE HANDED BACKHAND SHARE BY YEAR
+
+Because of these shortcomings I elected to drop rankings prior to 2000. 
 
 ```{r, message = FALSE}
 p4 <- clean %>% 
