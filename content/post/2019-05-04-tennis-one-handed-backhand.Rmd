@@ -1,5 +1,5 @@
 ---
-title: tennis_one_handed_backhand
+title: "Like Tennis's One-Handed Backhand? It Could Be Gone By 2030"
 author: ''
 date: '2019-05-04'
 slug: tennis-one-handed-backhand
@@ -8,23 +8,23 @@ tags: []
 ---
 
 
-```{r results='asis', echo=FALSE, include=FALSE, message = FALSE}
+```{r results='asis', echo=FALSE, include=FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(lubridate)
 library(hrbrthemes)
 library(ggthemes)
 library(scales)
+library(plotly)
 theme_set(theme_ipsum_rc() +
           theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
           theme(axis.title.y = element_text(angle = 0)))
 load("C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R")
 ```
 
-## Like Tennis's One-Handed Backhand? It Could Be Gone By 2030 
 
 ```{r results='asis', echo=FALSE}
 # ONE HANDED BACKHAND - EXTENDED MODEL
-clean %>% 
+p1 <- clean %>% 
   filter(year >= 2000) %>% 
   group_by(year) %>% 
   summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
@@ -38,6 +38,8 @@ clean %>%
   geom_hline(yintercept = 0, linetype = 2) +
   scale_y_continuous(labels = percent_format()) +
   labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year")
+
+ggplotly(p1)
 ```
 
 
@@ -48,18 +50,20 @@ clean %>%
 
 ```{r results='asis', echo= TRUE}
 
-clean %>% 
+p2 <- clean %>% 
   ggplot(aes(year, fill = is.na(one_hander))) +
   geom_density(alpha = .8) +
   labs(title = "Distribution of Missing Backhand Method by Year",
        fill = "Missing")
+
+ggplotly(p2)
 ```
 
 # ARE THE MISSING BANDHANDS CORRELATED WITH RANK?
 
 ```{r}
 
-clean %>% 
+p3 <- clean %>% 
   mutate(Ranking = parse_number(Ranking)) %>% 
   group_by(Ranking) %>% 
   summarize(missing_share = sum(is.na(one_hander))) %>% 
@@ -67,12 +71,14 @@ clean %>%
   geom_line(size = 1.7) +
   expand_limits(y = 0) +
   labs(title = "Sum of Missing Counts By Ranking")
+
+ggplotly(p3)
 ```
 
 # ONE HANDED BACKHAND SHARE BY YEAR
 
 ```{r, message = FALSE}
-clean %>% 
+p4 <- clean %>% 
   filter(year >= 2000) %>% 
   group_by(date) %>% 
   summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
@@ -81,12 +87,14 @@ clean %>%
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   labs(x = "", y = "", color = "", title = "Average Share of One Handers by Year")
+
+ggplotly(p4)
 ```
 
 # ONE HANDED BACKHAND RATE: TOP 50 VS 51 - 100
 
 ```{r}
-clean %>% 
+p5 <- clean %>% 
   filter(year >= 2000) %>% 
   group_by(year, rank_cohort) %>% 
   summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
@@ -96,13 +104,15 @@ clean %>%
         panel.grid.minor = element_blank()) +
   scale_y_percent() +
   labs(x = "", y = "", color = "", title = "Percent of One Handed Backhands in ATP Top 100")
+
+ggplotly(p5)
 ```
 
 # Again
 
 ```{r results='asis', echo=FALSE}
 # ONE HANDED BACKHAND - EXTENDED MODEL
-clean %>% 
+p6 <- clean %>% 
   filter(year >= 2000) %>% 
   group_by(year) %>% 
   summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
@@ -115,4 +125,6 @@ clean %>%
   xlim(c(2000,2030)) +
   geom_hline(yintercept = 0, linetype = 2) +
   labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year")
+
+ggplotly(p6)
 ```
