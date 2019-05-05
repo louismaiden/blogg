@@ -1,5 +1,5 @@
 ---
-title: "Like Tennis's One-Handed Backhand? It Could Be Gone From The Men's Top Game By 2030"
+title: "Like Tennis's One-Handed Backhand? It Could Be Gone From The Men's Top 100 By 2030"
 author: ''
 date: '2019-05-04'
 slug: tennis-one-handed-backhand
@@ -22,30 +22,13 @@ load("C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R")
 ```
 
 
-As a tennis fan, I recently came across an [article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) from ESPN on "the resurgence of the one-handed backhand." I've long been a fan of this shot and worried about its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. But after noticing that the ESPN article lacked sufficent empirical analysis, I set out to answer the question myself: is the one-handed backhand actually experiencing a resurgence?
-
+As a tennis fan, I recently came across an [article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) from ESPN on "the resurgence of the one-handed backhand." I've long been a fan of this shot and worry about its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. I decided to bolster the article's considerable detail with some empirical analysis to shed more light on the question: what is actually becoming of the one-handed backhand?
 
 ## About The Dataset
 
-I scraped data from the [ATP World Tour](https://www.atptour.com/en/rankings/singles) website from 1980 through 2019. I was delighted to see that the player names & ranking information were complete.
-
-```{r}
-is.na(clean$Ranking) %>% sum
-is.na(clean$Player) %>% sum
-```
-
+I scraped data from the [ATP World Tour](https://www.atptour.com/en/rankings/singles) website from 1980 through 2019. I was delighted to see that the player names & ranking information were complete. 
 
 However, there were a substantial amount of missing values in the variable describing what type of backhand a player hit.
-
-```{r}
-clean %>% 
-  filter(!str_detect(strokes,"One-Handed|Two-Handed")) %>% 
-  pull(Player) %>% 
-  unique() %>% 
-  length()
-```
-
-Looks like we're missing information for 610 unique players, and I suspected it might be the older data which accounted for the majority of the missings. We can inspect this with overlaid density plots of dates, colored by whether or not an observation is missing:
 
 ```{r results='asis', echo= TRUE}
 
@@ -58,15 +41,17 @@ p2 <- clean %>%
 ggplotly(p2)
 ```
 
-Perhaps more problematic is that the missing backhand information is correlated with rank; lower ranked players were more likely to contain missing backhand types:
+The graph above shows that the vast majority of the missings were for the previous years, which we might expect. 
+
+Perhaps more problematic, however, is that the missing backhand information is correlated with rank; lower ranked players were more likely to contain missing backhand types:
 
 ```{r}
 
 p3 <- clean %>% 
   mutate(Ranking = parse_number(Ranking)) %>% 
   group_by(Ranking) %>% 
-  summarize(missing_share = sum(is.na(one_hander))) %>% 
-  ggplot(aes(Ranking, missing_share)) +
+  summarize(missing_count = sum(is.na(one_hander))) %>% 
+  ggplot(aes(Ranking, missing_count)) +
   geom_line(size = 1.7) +
   expand_limits(y = 0) +
   scale_x_continuous(breaks = c(1,10,20,30,40,50,60,70,80,90,100)) +
@@ -75,7 +60,9 @@ p3 <- clean %>%
 ggplotly(p3)
 ```
 
-Sure, 610 players isn't terribly hard to, well, hard code. But I'll leave that for someone else to do should they feel so inclined (email me!). Despite these shortcomings I pushed on while filtering for dates from 2000 onwards.
+In total, 610 players were missing backhand types. This isn't terribly hard to hard code, but I'll leave that for someone else to do should they want to collaborate (email me!). 
+
+Despite these shortcomings I filtered for dates from 2000 onwards and pushed on.
 
 # ONE HANDED BACKHAND SHARE BY YEAR
 
@@ -95,10 +82,10 @@ p4 <- clean %>%
 ggplotly(p4)
 ```
 
-Above we see that undoubtedly, the share of tennis players in the ATP Top 100 is in steady decline.
+Above we see that undoubtedly, the share of tennis players in the ATP Top 100 is in steady decline: the percentage has plummeted from 42.5% in 2000 to 18% in 2019. However, this style of swing has a reputation for being an artisan shot, perhaps reserved for the best of the best. As such, I wanted to examine whether or not the trend held for the top 50 vs the bottom 50.
 
 
-# ONE HANDED BACKHAND RATE: TOP 50 VS 51 - 100
+## ONE HANDED BACKHAND RATE: TOP 50 VS 51 - 100
 
 ```{r}
 p5 <- clean %>% 
@@ -110,28 +97,38 @@ p5 <- clean %>%
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   scale_y_percent() +
-  labs(x = "", y = "", color = "", title = "Percent of One Handed Backhands in ATP Top 100")
+  labs(x = "", y = "", color = "", title = "Percent of One Handed Backhands in ATP Top 100, 95% CI's Shown")
 
 ggplotly(p5)
 ```
 
-# Again
+The graph above confirms that there is scarcely a different between the two trends worth noting. We can see that the top 50 have maintained a higher share of one-handers thanks to dominant players like Roger Federer <3, Stanislas Wawrinka, Richard Gasquet, and a host of upcoming talent. 
+
+Will we one day see a men's pro tour absent of wand-wavers? Should this trend continue, it appears that by just 2030 that the one-handed backhand could be largely extinct from the ATP Top 100:
 
 ```{r results='asis', echo=FALSE}
 # ONE HANDED BACKHAND - EXTENDED MODEL
 p6 <- clean %>% 
   filter(year >= 2000) %>% 
-  group_by(year) %>% 
-  summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
-  ggplot(aes(year, share)) +
-  geom_point(size = 2) +
+  group_by(date) %>% 
+  summarize(share = mean(one_hander, na.rm = TRUE), 
+            year = mean(year)) %>% 
+  ggplot(aes(date, share)) +
+  geom_point(size = 1) +
   stat_smooth(method = "lm", fullrange = TRUE) +
   theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 90)) +
   expand_limits(y = 0) +
-  xlim(c(2000,2030)) +
+  scale_x_date(date_breaks = "1 year", 
+                 labels=date_format("%Y"),
+                 limits = as.Date(c('2000-01-01','2030-01-01'))) +
   geom_hline(yintercept = 0, linetype = 2) +
-  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year")
+  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year, 95% CI's Shown")
 
 ggplotly(p6)
 ```
+
+The reason for this is complex, but revolves around the fact that the two-handed backhand has established itself as the defacto superior stroke in providing power, stability, and relaxed learning curve. This has led tennis coaches to effectively stop teaching the one-handed backhand.
+
+If you're like me, this will come to you as a huge bummer. So my advice: go out and see a dying art before it's too late! (i.e. before 2030) :).
