@@ -12,13 +12,12 @@
     
     
     <item>
-      <title>Like Tennis&#39;s One-Handed Backhand? It Could Be Gone By 2030</title>
+      <title>Like Tennis&#39;s One-Handed Backhand? It Could Be Gone From The Men&#39;s Top Game By 2030</title>
       <link>/blog/tennis-one-handed-backhand/</link>
       <pubDate>Sat, 04 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/tennis-one-handed-backhand/</guid>
-      <description>About The DatasetI scraped ranking data from the ATP World Tour website between the years of 1980 through present day. While I was delighted to see that the player names / rank information was complete, there are a substantial amount of missing values describing what type of backhand a player hit.
-As we might expect, it turns out that the older data contains the vast majority of the missings:</description>
+      <description>As a tennis fan, I recently came across an article from ESPN on “the resurgence of the one-handed backhand.” I’ve long been a fan of this shot and worried about its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. But after noticing that the ESPN article lacked sufficent empirical analysis, I set out to answer the question myself: is the one-handed backhand actually experiencing a resurgence?</description>
     </item>
     
     <item>

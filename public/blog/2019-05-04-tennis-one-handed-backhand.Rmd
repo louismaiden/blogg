@@ -1,5 +1,5 @@
 ---
-title: "Like Tennis's One-Handed Backhand? It Could Be Gone By 2030"
+title: "Like Tennis's One-Handed Backhand? It Could Be Gone From The Men's Top Game By 2030"
 author: ''
 date: '2019-05-04'
 slug: tennis-one-handed-backhand
@@ -22,11 +22,30 @@ load("C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R")
 ```
 
 
+As a tennis fan, I recently came across an [article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) from ESPN on "the resurgence of the one-handed backhand." I've long been a fan of this shot and worried about its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. But after noticing that the ESPN article lacked sufficent empirical analysis, I set out to answer the question myself: is the one-handed backhand actually experiencing a resurgence?
+
+
 ## About The Dataset
 
-I scraped ranking data from the [ATP World Tour](https://www.atptour.com/en/rankings/singles) website between the years of 1980 through present day. While I was delighted to see that the player names / rank information was complete, there are a substantial amount of missing values describing what type of backhand a player hit.
+I scraped data from the [ATP World Tour](https://www.atptour.com/en/rankings/singles) website from 1980 through 2019. I was delighted to see that the player names & ranking information were complete.
 
-As we might expect, it turns out that the older data contains the vast majority of the missings:
+```{r}
+is.na(clean$Ranking) %>% sum
+is.na(clean$Player) %>% sum
+```
+
+
+However, there were a substantial amount of missing values in the variable describing what type of backhand a player hit.
+
+```{r}
+clean %>% 
+  filter(!str_detect(strokes,"One-Handed|Two-Handed")) %>% 
+  pull(Player) %>% 
+  unique() %>% 
+  length()
+```
+
+Looks like we're missing information for 610 unique players, and I suspected it might be the older data which accounted for the majority of the missings. We can inspect this with overlaid density plots of dates, colored by whether or not an observation is missing:
 
 ```{r results='asis', echo= TRUE}
 
@@ -39,7 +58,7 @@ p2 <- clean %>%
 ggplotly(p2)
 ```
 
-Perhaps more problematic (but again expected), the missing backhand type's are correlated with rank; higher ranked players were less likely to be missing backhand type:
+Perhaps more problematic is that the missing backhand information is correlated with rank; lower ranked players were more likely to contain missing backhand types:
 
 ```{r}
 
@@ -50,14 +69,16 @@ p3 <- clean %>%
   ggplot(aes(Ranking, missing_share)) +
   geom_line(size = 1.7) +
   expand_limits(y = 0) +
+  scale_x_continuous(breaks = c(1,10,20,30,40,50,60,70,80,90,100)) +
   labs(title = "Sum of Missing Counts By Ranking")
 
 ggplotly(p3)
 ```
 
+Sure, 610 players isn't terribly hard to, well, hard code. But I'll leave that for someone else to do should they feel so inclined (email me!). Despite these shortcomings I pushed on while filtering for dates from 2000 onwards.
+
 # ONE HANDED BACKHAND SHARE BY YEAR
 
-Because of these shortcomings I elected to drop rankings prior to 2000. 
 
 ```{r, message = FALSE}
 p4 <- clean %>% 
@@ -68,10 +89,14 @@ p4 <- clean %>%
   geom_smooth(size = 1.7) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
-  labs(x = "", y = "", color = "", title = "Average Share of One Handers by Year")
+  labs(x = "", y = "", color = "", title = "Share of One-Handers by Year, 95% CI's Shown",
+       subtitle = "test")
 
 ggplotly(p4)
 ```
+
+Above we see that undoubtedly, the share of tennis players in the ATP Top 100 is in steady decline.
+
 
 # ONE HANDED BACKHAND RATE: TOP 50 VS 51 - 100
 
