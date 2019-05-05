@@ -106,7 +106,7 @@ What factors could have led to such a stark change in popular music in the early
 > "Within the last 5 years or so, the Detroit underground has been experimenting with technology, stretching it rather than simply using it. As the price of sequencers and synthesizers has dropped, so the experimentation has become more intense. Basically, we're tired of hearing about being in love or falling out, tired of the R&B system, so a new progressive sound has emerged. We call it techno!""
 — Juan Atkins, 1988
 
-This rejection of the sugar coated dance hits of yesteryear was accompanied by another technological advancement: personal casette players. For the first time, devices like the wildly popular Sony Walkman (1979) allowed for the consumption of music on an individual basis as opposed to in group settings, and as a result, music became an increasingly isolated experience.
+This rejection of the sugar coated dance hits of yesteryear was accompanied by another technological advancement: personal casette players. For the first time, devices like the wildly popular Sony Walkman (1979) allowed for the consumption of music on an individual basis as opposed to in group settings, and as a result, music becamn an increasingly isolated experience.
 
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
