@@ -97,7 +97,7 @@ p5 <- clean %>%
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   scale_y_percent() +
-  labs(x = "", y = "", color = "", title = "Percent of One Handed Backhands in ATP Top 100")
+  labs(x = "", y = "", color = "", title = "Percent of One Handed Backhands in ATP Top 100, 95% CI's Shown")
 
 ggplotly(p5)
 ```
@@ -110,17 +110,21 @@ Will we one day see a men's pro tour absent of wand-wavers? Should this trend co
 # ONE HANDED BACKHAND - EXTENDED MODEL
 p6 <- clean %>% 
   filter(year >= 2000) %>% 
-  group_by(year) %>% 
-  summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
-  ggplot(aes(year, share)) +
-  geom_point(size = 2) +
+  group_by(date) %>% 
+  summarize(share = mean(one_hander, na.rm = TRUE), 
+            year = mean(year)) %>% 
+  ggplot(aes(date, share)) +
+  geom_point(size = 1) +
   stat_smooth(method = "lm", fullrange = TRUE) +
   theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 90)) +
   expand_limits(y = 0) +
-  xlim(c(2000,2030)) +
+  scale_x_date(date_breaks = "1 year", 
+                 labels=date_format("%Y"),
+                 limits = as.Date(c('2000-01-01','2030-01-01'))) +
   geom_hline(yintercept = 0, linetype = 2) +
-  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year")
+  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year, 95% CI's Shown")
 
 ggplotly(p6)
 ```
