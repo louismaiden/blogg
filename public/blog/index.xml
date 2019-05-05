@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>tennis_one_handed_backhand</title>
+      <link>/blog/tennis-one-handed-backhand/</link>
+      <pubDate>Sat, 04 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/tennis-one-handed-backhand/</guid>
+      <description>Like Tennis’s One-Handed Backhand? It Could Be Gone By 2030About The DatasetDISTRIBUTION OF MISSING ONE HANDED BACKHANDS OVER TIMEclean %&amp;gt;% ggplot(aes(year, fill = is.na(one_hander))) +geom_density(alpha = .8) +labs(title = &amp;quot;Distribution of Missing Backhand Method by Year&amp;quot;,fill = &amp;quot;Missing&amp;quot;)ARE THE MISSING BANDHANDS CORRELATED WITH RANK?clean %&amp;gt;% mutate(Ranking = parse_number(Ranking)) %&amp;gt;% group_by(Ranking) %&amp;gt;% summarize(missing_share = sum(is.na(one_hander))) %&amp;gt;% ggplot(aes(Ranking, missing_share)) +geom_line(size = 1.</description>
+    </item>
+    
+    <item>
       <title>Chart-topping Songs Have Gotten More Depressing Over Time</title>
       <link>/blog/popular-music-is-getting-more-depressing-over-time/</link>
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
