@@ -21,7 +21,25 @@ theme_set(theme_ipsum_rc() +
 load("C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R")
 ```
 
+```{r results='asis', echo=FALSE}
+# ONE HANDED BACKHAND - EXTENDED MODEL
+p6 <- clean %>% 
+  filter(year >= 2000) %>% 
+  group_by(year) %>% 
+  summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
+  ggplot(aes(year, share)) +
+  geom_point(size = 1) +
+  stat_smooth(method = "lm", fullrange = TRUE) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  expand_limits(y = 0) +
+  xlim(c(2000,2030)) +
+  scale_y_continuous(labels = percent_format()) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year, 95% CI's Shown")
 
+ggplotly(p6)
+```
 As a tennis fan, I recently came across an [article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) from ESPN on "the resurgence of the one-handed backhand." I've long been a fan of this shot and worry about its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. I decided to bolster the article's considerable detail with some empirical analysis to shed more light on the question: what is actually becoming of the one-handed backhand?
 
 ## About The Dataset
@@ -110,25 +128,22 @@ Will we one day see a men's pro tour absent of wand-wavers? Should this trend co
 # ONE HANDED BACKHAND - EXTENDED MODEL
 p6 <- clean %>% 
   filter(year >= 2000) %>% 
-  group_by(date) %>% 
-  summarize(share = mean(one_hander, na.rm = TRUE), 
-            year = mean(year)) %>% 
-  ggplot(aes(date, share)) +
+  group_by(year) %>% 
+  summarize(share = mean(one_hander, na.rm = TRUE)) %>% 
+  ggplot(aes(year, share)) +
   geom_point(size = 1) +
   stat_smooth(method = "lm", fullrange = TRUE) +
   theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 90)) +
+        panel.grid.minor = element_blank()) +
   expand_limits(y = 0) +
-  scale_x_date(date_breaks = "1 year", 
-                 labels=date_format("%Y"),
-                 limits = as.Date(c('2000-01-01','2030-01-01'))) +
+  xlim(c(2000,2030)) +
+  scale_y_continuous(labels = percent_format()) +
   geom_hline(yintercept = 0, linetype = 2) +
   labs(x = "", y = "", color = "", title = "Average Share of One-Handers in ATP Top 100 by Year, 95% CI's Shown")
 
 ggplotly(p6)
 ```
 
-The reason for this is complex, but revolves around the fact that the two-handed backhand has established itself as the defacto superior stroke in providing power, stability, and relaxed learning curve. This has led tennis coaches to effectively stop teaching the one-handed backhand.
+The reason for this revolves around the fact that many consider the two-handed backhand as the defacto superior stroke in its combination of power, stability, and relaxed learning curve. This has led tennis coaches to effectively stop teaching the one-handed backhand.
 
 If you're like me, this will come to you as a huge bummer. So my advice: go out and see a dying art before it's too late! (i.e. before 2030) :).
