@@ -6,10 +6,19 @@
     <description>Recent content on Louis Maiden</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 09 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>tennis_one_handed_backhand</title>
+      <link>/post/tennis-one-handed-backhand/</link>
+      <pubDate>Sat, 04 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tennis-one-handed-backhand/</guid>
+      <description>Like Tennis’s One-Handed Backhand? It Could Be Gone By 2030About The DatasetDISTRIBUTION OF MISSING ONE HANDED BACKHANDS OVER TIMEclean %&amp;gt;% ggplot(aes(year, fill = is.na(one_hander))) +geom_density(alpha = .8) +labs(title = &amp;quot;Distribution of Missing Backhand Method by Year&amp;quot;,fill = &amp;quot;Missing&amp;quot;)ARE THE MISSING BANDHANDS CORRELATED WITH RANK?clean %&amp;gt;% mutate(Ranking = parse_number(Ranking)) %&amp;gt;% group_by(Ranking) %&amp;gt;% summarize(missing_share = sum(is.na(one_hander))) %&amp;gt;% ggplot(aes(Ranking, missing_share)) +geom_line(size = 1.</description>
+    </item>
     
     <item>
       <title>Chart-topping Songs Have Gotten More Depressing Over Time</title>
@@ -32,7 +41,7 @@ Valence: 0.691&#34;,&#34;x&#34;:1960.12572861277,&#34;y&#34;:0.690973376440629},
       <description>{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Song Valence By Release Year&#34;},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Valence&#34;},&#34;type&#34;:&#34;linear&#34;,&#34;max&#34;:1},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;label&#34;:{&#34;enabled&#34;:false},&#34;turboThreshold&#34;:0,&#34;showInLegend&#34;:false},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;scatter&#34;:{&#34;marker&#34;:{&#34;symbol&#34;:&#34;circle&#34;}}},&#34;series&#34;:[{&#34;group&#34;:&#34;group&#34;,&#34;data&#34;:[{&#34;track_name&#34;:&#34;El Paso&#34;,&#34;artist_name&#34;:&#34;Marty Robbins&#34;,&#34;album_name&#34;:&#34;Gunfighter Ballads And Trail Songs&#34;,&#34;valence&#34;:0.691,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Marty Robbins
 Track: El Paso
 Album: Gunfighter Ballads And Trail Songs
-Valence: 0.691&#34;,&#34;x&#34;:1959.99416193813,&#34;y&#34;:0.690934768226556},{&#34;track_name&#34;:&#34;Running Bear&#34;,&#34;artist_name&#34;:&#34;Johnny Preston&#34;,&#34;album_name&#34;:&#34;Greatest Hits&#34;,&#34;valence&#34;:0.822,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Johnny Preston</description>
+Valence: 0.691&#34;,&#34;x&#34;:1959.86361625614,&#34;y&#34;:0.69097174608279},{&#34;track_name&#34;:&#34;Running Bear&#34;,&#34;artist_name&#34;:&#34;Johnny Preston&#34;</description>
     </item>
     
     <item>

@@ -1,0 +1,71 @@
+---
+title: tennis_one_handed_backhand
+author: ''
+date: '2019-05-04'
+slug: tennis-one-handed-backhand
+categories: []
+tags: []
+---
+
+
+
+<div id="like-tenniss-one-handed-backhand-it-could-be-gone-by-2030" class="section level2">
+<h2>Like Tennis’s One-Handed Backhand? It Could Be Gone By 2030</h2>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="about-the-dataset" class="section level2">
+<h2>About The Dataset</h2>
+</div>
+<div id="distribution-of-missing-one-handed-backhands-over-time" class="section level1">
+<h1>DISTRIBUTION OF MISSING ONE HANDED BACKHANDS OVER TIME</h1>
+<pre class="r"><code>clean %&gt;% 
+  ggplot(aes(year, fill = is.na(one_hander))) +
+  geom_density(alpha = .8) +
+  labs(title = &quot;Distribution of Missing Backhand Method by Year&quot;,
+       fill = &quot;Missing&quot;)</code></pre>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="are-the-missing-bandhands-correlated-with-rank" class="section level1">
+<h1>ARE THE MISSING BANDHANDS CORRELATED WITH RANK?</h1>
+<pre class="r"><code>clean %&gt;% 
+  mutate(Ranking = parse_number(Ranking)) %&gt;% 
+  group_by(Ranking) %&gt;% 
+  summarize(missing_share = sum(is.na(one_hander))) %&gt;% 
+  ggplot(aes(Ranking, missing_share)) +
+  geom_line(size = 1.7) +
+  expand_limits(y = 0) +
+  labs(title = &quot;Sum of Missing Counts By Ranking&quot;)</code></pre>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="one-handed-backhand-share-by-year" class="section level1">
+<h1>ONE HANDED BACKHAND SHARE BY YEAR</h1>
+<pre class="r"><code>clean %&gt;% 
+  filter(year &gt;= 2000) %&gt;% 
+  group_by(date) %&gt;% 
+  summarize(share = mean(one_hander, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(date, share)) +
+  geom_smooth(size = 1.7) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  labs(x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;, title = &quot;Average Share of One Handers by Year&quot;)</code></pre>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="one-handed-backhand-rate-top-50-vs-51---100" class="section level1">
+<h1>ONE HANDED BACKHAND RATE: TOP 50 VS 51 - 100</h1>
+<pre class="r"><code>clean %&gt;% 
+  filter(year &gt;= 2000) %&gt;% 
+  group_by(year, rank_cohort) %&gt;% 
+  summarize(share = mean(one_hander, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(year, share, color = as.factor(rank_cohort))) +
+  geom_smooth(se = FALSE, size = 1.7) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_y_percent() +
+  labs(x = &quot;&quot;, y = &quot;&quot;, color = &quot;&quot;, title = &quot;Percent of One Handed Backhands in ATP Top 100&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="again" class="section level1">
+<h1>Again</h1>
+<p><img src="/post/2019-05-04-tennis-one-handed-backhand_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>

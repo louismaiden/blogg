@@ -15,7 +15,7 @@ library(dplyr)
 library(ggplot2)
 library(hrbrthemes)
 library(plotly)
-library(highcharter)
+library(highcharter) 
 library(moderndive)
 library(broom)
 

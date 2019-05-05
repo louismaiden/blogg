@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/post/tennis-one-handed-backhand/</loc>
+    <lastmod>2019-05-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/popular-music-is-getting-more-depressing-over-time/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
   </url>
@@ -59,13 +64,13 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
