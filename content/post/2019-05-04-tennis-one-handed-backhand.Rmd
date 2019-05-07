@@ -40,7 +40,7 @@ p1 <-clean %>%
 
 ggplotly(p1)
 ```
-As a tennis fan, I recently came across a 2013 [ESPN article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) describing "the resurgence of the one-handed backhand." I've long been a fan of this shot but question its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. I decided to bolster the article's considerable detail with some empirical analysis to shed more light on the question: what is actually becoming of the one-handed backhand?
+As a tennis fan, I recently came across a [2013 ESPN article](http://www.espn.com/tennis/story/_/id/10475414/tennis-resurgence-one-handed-backhand) describing "the resurgence of the one-handed backhand." I've long been a fan of this shot but question its future in tennis, as we seem to be seeing less and less of it as each subsequent season passes. I decided to bolster the article's considerable detail with some empirical analysis to shed more light on the question: what is actually becoming of the one-handed backhand?
 
 ## About The Dataset
 
@@ -79,7 +79,7 @@ ggplotly(p2)
 
 In total, 610 unique players were missing backhand types. This isn't terribly hard to hard code, and I'll leave that for someone else to do should they want to collaborate (email me!). 
 
-Despite these shortcomings, I filtered for dates from 2000 onwards and pushed on. Note that the confidence intervals in the graph below are almost invisible due to the abundance of data points in a given year.
+Despite these shortcomings, I filtered for dates from 2000 onward and pushed on. Note that the confidence intervals in the graph below are almost invisible due to the abundance of data points in a given year.
 
 # ONE HANDED BACKHAND SHARE BY YEAR
 
@@ -144,8 +144,8 @@ p5 <- clean %>%
 ggplotly(p5)
 ```
 
-The reason for this revolves around the fact that many coaches consider the two-handed backhand as the defacto superior stroke in its combination of power, stability, and comparatively gentler learning curve. The result has led the one-hander to effectively stop being taught.
+The reason for this revolves around the fact that many coaches consider the two-handed backhand as the de facto superior stroke in its combination of power, stability, and comparatively gentler learning curve. The result has led the one-hander to effectively stop being taught.
 
 I'd love to repeat this analysis for the WTA, but the one-hander has pretty much already disappeared from the women's tour. 
 
-If you're like me, this will come to you as a huge dissapointment. So my advice: go out and see a dying art before it's too late! (i.e. before 2030) :).
+If you're like me, this will come to you as a huge disappointment. So my advice: go out and see a dying art before it's too late! (i.e. before 2030) :).
