@@ -1,48 +1,31 @@
 {{ partial "header.html" . }}
-<div class="main column">
+<section class="main">
     <div class="container">
         <div class="content">
-            {{ range where .Data.Pages "Title" "Home" }}
+            {{ if .Content }}
                 <div class="markdown">
-                {{ .Content }}
+                    {{ .Content }}
                 </div>
             {{ end }}
-
-            {{ if isset .Site.Params "latestpostcount" }}
-                <div class="posts">
-                {{ $nbPosts := len (where .Data.Pages "Section" "blog") }}
-                {{ if gt $nbPosts 0 }}
-                    <div class="page-heading">Latest posts</div>
-                    <ul>
-                    {{ range (first .Site.Params.latestpostcount (where .Pages "Section" "blog")).GroupByDate "Jan, 2006" "desc" }}
-                        <li class="groupby">{{ .Key }}</li>
-                        {{ range sort .Pages "Date" "desc" }}
-                            {{ partial "li.html" . }}
-                        {{ end }}
-                    {{ end }}
-                    </ul>
-
-                    {{ if gt $nbPosts .Site.Params.latestpostcount }}
-                        <a href="./blog/" class="see-more">See more ...</a>
-                    {{ end }}
-                {{ end }}
-                </div>
-            {{ end }}
-
-            <div class="best-posts">
-            {{ $nbPosts := len (where .Data.Pages "Params.best" true) }}
-            {{ if gt $nbPosts 0 }}
-                <div class="page-heading">Best posts</div>
+            {{ $totalpostscount := len (where .Data.Pages "Section" "blog") }}
+            {{ $latestpostscount := .Site.Params.latestpostscount | default $totalpostscount }}
+            {{ if gt $latestpostscount 0 }}
+                <div class="page-heading">{{ i18n "latestPosts" }}</div>
                 <ul>
-                {{ range sort .Data.Pages "Date" "desc" }}
-                    {{ if eq .Params.best true }}
+                    {{ range (first $latestpostscount (where .Data.Pages.ByPublishDate.Reverse "Section" "blog")) }}
                         {{ partial "li.html" . }}
                     {{ end }}
-                {{ end }}
+                    {{ if gt $totalpostscount $latestpostscount }}
+                        {{ range where .Site.Menus.main "Identifier" "blog" }}
+                            <li class="post-item no-bullet">
+                                <a id="see-more" {{ printf "href=%q " .URL | safeHTMLAttr }}><span>See more&hellip;</span></a>
+                            </li>
+                        {{ end }}
+                    {{ end }}
                 </ul>
             {{ end }}
-            </div>
         </div>
     </div>
-</div>
+</section>
 {{ partial "footer.html" . }}
+
