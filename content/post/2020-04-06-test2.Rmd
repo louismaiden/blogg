@@ -9,6 +9,8 @@ tags: []
 
 ```{r}
 
-mtcars
+library(tidyverse)
+
+mtcars %>% head()
 
 ``` 
