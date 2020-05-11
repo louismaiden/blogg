@@ -1,0 +1,136 @@
+---
+title: "test"
+author: ''
+date: '2020-04-06'
+slug: test
+categories: []
+tags: []
+---
+
+
+
+
+```{r results='asis', echo=FALSE, include=FALSE}
+library(tidyverse)
+library(leaflet)
+library(leaflet.extras)
+library(tidyverse)
+library(leaflet)
+library(leaflet.extras)
+library(htmlwidgets)
+library(broom)
+library(httr)
+library(tigris)
+library(rgdal)
+
+
+
+pizza_barstool <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_barstool.csv") %>% 
+  mutate(latitude = case_when(name == "La Gusto Pizza" ~ 40.748980,
+                               name == "Rubirosa" ~ 40.722752,
+                               TRUE ~ latitude),
+         longitude = case_when(name == "La Gusto Pizza" ~ -73.995320,
+                              name == "Rubirosa" ~ -73.996246,
+                              TRUE ~ longitude))
+
+# get zipcodes with >= 5 reviews
+nyc_pizza <- pizza_barstool %>% 
+  filter(city %in% c("New York","Brooklyn"),
+         longitude >= -74.05)
+
+# CREATE MARKERS ----
+pizzaIcon <- makeIcon(
+  iconUrl = ifelse(nyc_pizza$review_stats_dave_average_score < 8, "pizza_pic.png", "star_pic.png"),
+  iconWidth = 38, iconHeight = 55,
+  iconAnchorX = 12, iconAnchorY = 24
+)
+
+
+pizzaIcon2 <- makeIcon(
+  iconUrl = "pizza_pic.png",
+  iconWidth = 38, iconHeight = 55,
+  iconAnchorX = 12, iconAnchorY = 24
+)
+
+starIcon2 <- makeIcon(
+  iconUrl = "star_pic.png",
+  iconWidth = 38, iconHeight = 55,
+  iconAnchorX = 12, iconAnchorY = 24
+)
+
+r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+
+nyc_pizza_spdf <- nyc_pizza
+coordinates(nyc_pizza_spdf) <- ~longitude + latitude
+proj4string(nyc_pizza_spdf) <- proj4string(nyc_neighborhoods)
+matches <- over(nyc_pizza_spdf, nyc_neighborhoods)
+points <- cbind(nyc_pizza, matches) %>% as_tibble()
+
+
+medians_by_neighborhood <- points %>% 
+  group_by(neighborhood) %>% 
+  mutate(top_score = max(review_stats_dave_average_score),
+         top_rest = ifelse(review_stats_dave_average_score == top_score, name, NA),
+         top_rest = ifelse(!is.na(top_rest), paste0(top_rest, " (", review_stats_dave_average_score, ")"), NA)) %>% 
+  summarize(top_rest = paste0(top_rest, collapse = ", "),
+            median_score=median(review_stats_dave_average_score), reviews = n()) %>% 
+  mutate(top_rest = str_remove_all(top_rest, "NA, "),
+         top_rest = str_remove_all(top_rest, ", NA"))
+
+map_data <- geo_join(nyc_neighborhoods, medians_by_neighborhood, "neighborhood", "neighborhood")
+
+
+nyc_neighborhoods@data <- nyc_neighborhoods@data %>% as_tibble() %>% 
+  inner_join(points %>% select(name, neighborhood, review_stats_dave_average_score), by = "neighborhood") %>% 
+  select(name, everything()) %>% 
+  group_by(neighborhood) %>% 
+  mutate(median_score = median(review_stats_dave_average_score),
+            n = n(),
+         median_score = if_else(n < 5, NaN, median_score)) %>% 
+  ungroup()
+  
+
+less_than_eight <- nyc_pizza %>% filter(review_stats_dave_average_score < 8) %>% rename(lng = longitude,                                                                                        lat = latitude)
+greater_than_eight <- nyc_pizza %>% filter(review_stats_dave_average_score >= 8) %>% rename(lng = longitude,
+                                                                                        lat = latitude)
+
+
+
+nyc_pal <- colorNumeric(c("YlGnBu"), domain  = nyc_neighborhoods@data$median_score)
+
+previewColors(pal = nyc_pal,
+              values = c(seq(1,10,1)))
+
+
+pizza_map <- nyc_neighborhoods %>% 
+  leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>% 
+  addPolygons(data = map_data, weight = 2, fillOpacity = .4, 
+              popup = ~paste0("<b>",neighborhood,"</b>", "<br>", 
+                              "Neighborhood Average: ", median_score, "<br>", 
+                              "Number of Reviews: ", reviews, "<br>", 
+                              "Top Location(s): ", top_rest),
+              color = ~nyc_pal(median_score),
+              group = "Neighborhood") %>% 
+  addMarkers(data = less_than_eight, 
+             icon = pizzaIcon2,
+             popup = paste0("<b>",less_than_eight$name, ": ", "</b>", less_than_eight$review_stats_dave_average_score), 
+             label = less_than_eight$name,
+             group = "Less Than Eight") %>% 
+  addMarkers(data = greater_than_eight, 
+             icon = starIcon2,
+             popup = paste0("<b>",greater_than_eight$name, ": ", "</b>", greater_than_eight$review_stats_dave_average_score),
+             label = greater_than_eight$name,
+             group = "Greater Than Eight") %>% 
+  addLayersControl(overlayGroups = c("Less Than Eight", "Greater Than Eight", "Neighborgood")) %>% 
+  addSearchFeatures(targetGroups = c("Less Than Eight", "Greater Than Eight"), 
+                    options = searchFeaturesOptions(zoom = 17)) %>% 
+  addResetMapButton() 
+
+```
+
+
+```{r}
+pizza_map
+```
