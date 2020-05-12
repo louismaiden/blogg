@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="author" content="Louis Maiden">
+<meta name="description" content="library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as.character(date),date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% pull()counter &lt;- 0df_main &lt;- tibble()for (date in dates) {print(as.character(date))print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))link &lt;- paste0(&quot;https://www.">
+
+<meta property="og:title" content="ATP World Tour Website Scraping" />
+<meta property="og:description" content="library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as.character(date),date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% pull()counter &lt;- 0df_main &lt;- tibble()for (date in dates) {print(as.character(date))print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))link &lt;- paste0(&quot;https://www." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/blog/atp-world-tour-website-scraping/" />
+<meta property="article:published_time" content="2020-05-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-05-12T00:00:00+00:00" />
+
+
+<title>
+
+
+     ATP World Tour Website Scraping 
+
+</title>
+<link rel="canonical" href="/blog/atp-world-tour-website-scraping/">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="/css/reset.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+    <link rel="stylesheet" href="/css/pygments.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+    <link rel="stylesheet" href="/css/main.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+    
+        <link rel="stylesheet" href="/css/override.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/img/leaf.ico"
+
+>
+
+
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+                
+                
+                
+                
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                
+                <a href="/"><img class="avatar" src="/img/music_brain.png" srcset="/img/music_brain.png 1x"></a>
+            
+            <a href="/"><div class="name">Louis Maiden</div></a>
+            
+            <nav>
+                <ul>
+                    
+                        <li class="nav-blog"><a href="/blog/"><span>Blog</span></a></li>
+                    
+                        <li class="nav-about"><a href="/about/"><span>About</span></a></li>
+                    
+                        <li class="nav-code"><a href="/code/"><span>Code</span></a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+        
+
+        
+
+        
+
+	
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:louismaiden@gmail.com"><img class="icon" src="/img/email.svg" alt="email" /></a>
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    ATP World Tour Website Scraping
+
+</div>
+
+                    <div class="initials"><a href="/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Tue May 12 2020 00:00:00 UTC'>May 12, 2020</div>
+                    
+                    
+		    <div class="reading-time"><div class="middot"></div>2 minutes read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+
+<pre class="r"><code>library(tidyverse)
+library(rvest)
+library(lubridate)
+library(hrbrthemes)
+library(ggthemes)
+theme_set(theme_ipsum_rc() +
+          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+          theme(axis.title.y = element_text(angle = 0)))
+
+dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% 
+  select(date = 1) %&gt;% 
+  mutate(date = dmy(date),
+         year = year(date)) %&gt;% 
+  filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% 
+  select(-year) %&gt;% 
+  mutate(date = as.character(date),
+         date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% 
+  pull()
+
+
+counter &lt;- 0
+df_main &lt;- tibble()
+
+for (date in dates) {
+  
+  print(as.character(date))
+  print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))
+  link &lt;- paste0(&quot;https://www.atptour.com/en/rankings/singles?rankDate=&quot;,
+                  date,
+                  &quot;&amp;rankRange=0-100&quot;)
+   
+  print(&quot;MADE LINK&quot;)
+
+# SCRAPE MAIN TABLE
+table_main &lt;- link %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;table&quot;) %&gt;% 
+  .[[1]] %&gt;% 
+  html_table() %&gt;% 
+  mutate(date = date)
+
+print(&quot;MADE MAIN TABLE&quot;)
+
+# GET LINKS TO EACH PLAYER
+player_links &lt;- link %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;a&quot;) %&gt;% 
+  html_attr(&quot;href&quot;) %&gt;% 
+  str_subset(&quot;player&quot;) %&gt;% 
+  str_subset(&quot;overview&quot;)
+
+table_main &lt;- table_main %&gt;% 
+  cbind(player_links)
+
+print(&quot;GOT PLAYER LINKS&quot;)
+# SCRAPE PLAYER LINKS FOR INFO
+
+df &lt;- tibble()
+
+player_urls &lt;- paste0(&quot;https://www.atptour.com&quot;,player_links)
+
+for (player_url in player_urls) {
+  
+player_info &lt;- player_url[1] %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;table&quot;) %&gt;% 
+  .[[1]] %&gt;% 
+  html_table(fill = TRUE) %&gt;% 
+  unlist() %&gt;% 
+  as_tibble() %&gt;% 
+  rownames_to_column() %&gt;% 
+  spread(key = rowname,value = value) %&gt;% 
+  select(age = 1, birthplace = 2, turned_pro = 3, residence = 4, weight = 5, strokes = 6, height = 7, coach = 8)
+
+df &lt;- rbind(df, player_info)
+
+}
+
+table_main &lt;- table_main %&gt;% cbind(df)
+print(&quot;CBINDED INFO&quot;)
+#df_main &lt;- rbind(df_main, table_main)
+#print(&quot;RBINDED INFO&quot;)
+counter &lt;- counter + 1
+
+date &lt;- date %&gt;% str_replace_all(&quot;\\.&quot;,&quot;_&quot;)
+write_csv(table_main, paste0(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/tennis_&quot;,date,&quot;.csv&quot;))
+Sys.sleep(abs(rnorm(1,.2)))
+
+}
+
+df_new &lt;- tibble()
+component_files &lt;- list.files(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/1_raw/&quot;)
+component_files
+
+for (file in component_files) {
+  csv &lt;- read_csv(paste0(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/1_raw/&quot;,file))
+  df_new &lt;- rbind(df_new, csv)
+}
+
+clean &lt;- df_new %&gt;% 
+  mutate(one_hander = strokes %&gt;% str_detect(&quot;One-Handed Backhand&quot;),
+         one_hander = ifelse(strokes %&gt;% str_detect(&quot;Unknown Backhand&quot;),NA,one_hander),
+         date = ymd(date),
+         year = year(date),
+         ranking = parse_number(Ranking),
+         rank_cohort = case_when(ranking &lt;= 50 ~ &quot;Rank 1 - 50&quot;,
+                                 ranking &gt;50 &amp; ranking &lt;= 100 ~ &quot;Rank 51 - 100&quot;))
+
+save(clean, file = &quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R&quot;)</code></pre>
+
+                <br>
+                
+                <p class="back-to-posts"><a href="/blog">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "cocoaexamplesite" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,120 @@
+---
+title: ATP World Tour Website Scraping
+author: Louis Maiden
+date: '2020-05-12'
+slug: atp-world-tour-website-scraping
+categories: []
+tags: []
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(rvest)
+library(lubridate)
+library(hrbrthemes)
+library(ggthemes)
+theme_set(theme_ipsum_rc() +
+          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+          theme(axis.title.y = element_text(angle = 0)))
+
+dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% 
+  select(date = 1) %&gt;% 
+  mutate(date = dmy(date),
+         year = year(date)) %&gt;% 
+  filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% 
+  select(-year) %&gt;% 
+  mutate(date = as.character(date),
+         date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% 
+  pull()
+
+
+counter &lt;- 0
+df_main &lt;- tibble()
+
+for (date in dates) {
+  
+  print(as.character(date))
+  print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))
+  link &lt;- paste0(&quot;https://www.atptour.com/en/rankings/singles?rankDate=&quot;,
+                  date,
+                  &quot;&amp;rankRange=0-100&quot;)
+   
+  print(&quot;MADE LINK&quot;)
+
+# SCRAPE MAIN TABLE
+table_main &lt;- link %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;table&quot;) %&gt;% 
+  .[[1]] %&gt;% 
+  html_table() %&gt;% 
+  mutate(date = date)
+
+print(&quot;MADE MAIN TABLE&quot;)
+
+# GET LINKS TO EACH PLAYER
+player_links &lt;- link %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;a&quot;) %&gt;% 
+  html_attr(&quot;href&quot;) %&gt;% 
+  str_subset(&quot;player&quot;) %&gt;% 
+  str_subset(&quot;overview&quot;)
+
+table_main &lt;- table_main %&gt;% 
+  cbind(player_links)
+
+print(&quot;GOT PLAYER LINKS&quot;)
+# SCRAPE PLAYER LINKS FOR INFO
+
+df &lt;- tibble()
+
+player_urls &lt;- paste0(&quot;https://www.atptour.com&quot;,player_links)
+
+for (player_url in player_urls) {
+  
+player_info &lt;- player_url[1] %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(&quot;table&quot;) %&gt;% 
+  .[[1]] %&gt;% 
+  html_table(fill = TRUE) %&gt;% 
+  unlist() %&gt;% 
+  as_tibble() %&gt;% 
+  rownames_to_column() %&gt;% 
+  spread(key = rowname,value = value) %&gt;% 
+  select(age = 1, birthplace = 2, turned_pro = 3, residence = 4, weight = 5, strokes = 6, height = 7, coach = 8)
+
+df &lt;- rbind(df, player_info)
+
+}
+
+table_main &lt;- table_main %&gt;% cbind(df)
+print(&quot;CBINDED INFO&quot;)
+#df_main &lt;- rbind(df_main, table_main)
+#print(&quot;RBINDED INFO&quot;)
+counter &lt;- counter + 1
+
+date &lt;- date %&gt;% str_replace_all(&quot;\\.&quot;,&quot;_&quot;)
+write_csv(table_main, paste0(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/tennis_&quot;,date,&quot;.csv&quot;))
+Sys.sleep(abs(rnorm(1,.2)))
+
+}
+
+df_new &lt;- tibble()
+component_files &lt;- list.files(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/1_raw/&quot;)
+component_files
+
+for (file in component_files) {
+  csv &lt;- read_csv(paste0(&quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/1_raw/&quot;,file))
+  df_new &lt;- rbind(df_new, csv)
+}
+
+clean &lt;- df_new %&gt;% 
+  mutate(one_hander = strokes %&gt;% str_detect(&quot;One-Handed Backhand&quot;),
+         one_hander = ifelse(strokes %&gt;% str_detect(&quot;Unknown Backhand&quot;),NA,one_hander),
+         date = ymd(date),
+         year = year(date),
+         ranking = parse_number(Ranking),
+         rank_cohort = case_when(ranking &lt;= 50 ~ &quot;Rank 1 - 50&quot;,
+                                 ranking &gt;50 &amp; ranking &lt;= 100 ~ &quot;Rank 51 - 100&quot;))
+
+save(clean, file = &quot;C:/Users/nyulo/Documents/HBS/LM/tennis_rankings/data/atp_top_100.R&quot;)</code></pre>
