@@ -6,10 +6,28 @@
     <description>Recent content on Louis Maiden</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Mon, 11 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2020 TEST POST</title>
+      <link>/blog/2020-test-post/</link>
+      <pubDate>Tue, 12 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2020-test-post/</guid>
+      <description>This is a test</description>
+    </item>
+    
+    <item>
+      <title>2020 TEST POST</title>
+      <link>/post/2020-test-post/</link>
+      <pubDate>Tue, 12 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020-test-post/</guid>
+      <description>This is a test</description>
+    </item>
     
     <item>
       <title>2020-05 TEST POSTTT NEW</title>
