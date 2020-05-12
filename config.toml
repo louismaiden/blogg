@@ -1,4 +1,4 @@
-baseurl             = "https://github.com/louismaiden/blogg"
+baseurl             = "https://you.github.io/"
 builddrafts         = false
 canonifyurls        = true
 contentdir          = "content"
