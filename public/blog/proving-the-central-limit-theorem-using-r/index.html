@@ -3,982 +3,69 @@
 
 <head>
 <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="author" content="Louis Maiden">
+<meta name="description" content="What is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
+If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases.">
 
-<meta name="description" content="louismaiden">
-
-
-    <meta property="twitter:site" content="@https://twitter.com/ljm2174">
-
-<meta property="og:site_name" content="Louis Maiden" />
-<meta property="og:locale" content="en-US" />
+<meta property="og:title" content="Proving the Central Limit Theorem using R" />
+<meta property="og:description" content="What is the central limit theorem?Perhaps the most important concept in statistical inference. It gives us two primary insights:
+If a variable is normally distributed, the sampling distribution of a test statistic calculated from this variable will also be normally distributed.
+If a variable’s distribution is non-normal or unknown, the sampling distribution of its test statistics approach normality as sample size increases." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/blog/proving-the-central-limit-theorem-using-r/" />
-<meta property="og:title" content="Proving the Central Limit Theorem using R" />
-<meta property="twitter:title" content="Proving the Central Limit Theorem using R">
+<meta property="article:published_time" content="2018-02-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-02-26T00:00:00+00:00" />
 
-    <meta property="twitter:card" content="summary">
-
-<meta property="og:description" content="">
-<meta property="twitter:description" content="">
 
 <title>
 
 
-     Louis Maiden - Proving the Central Limit Theorem using R 
+     Proving the Central Limit Theorem using R 
 
 </title>
 <link rel="canonical" href="/blog/proving-the-central-limit-theorem-using-r/">
 
 
-<style media="screen">
-  @font-face {
-  font-family: 'Nexa Bold';
-  src: url('/fonts/Nexa Bold.otf');
-}
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section, div.column {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol, ul {
-  list-style: none;
-}
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-a,
-a:visited,
-a:focus,
-a:active {
-  text-decoration: none;
-}
-html {
-  height: 100%;
-  font-size: 16px;
-}
-body {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  min-height: 100%;
-  font-weight: 400;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  color: #111111;
-  line-height: 1.6;
-  text-rendering: optimizeLegibility !important;
-}
-.icon {
-  text-rendering: geometricPrecision !important;
-}
-section {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  width: 100%;
-}
-div.column {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  width: 100%;
-}
-.container {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  width: 100%;
-}
-div.header .container {
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-}
-div.header .content {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-}
-div.header .container .logo {
-  
-  max-width: 100px;
-  
-  margin-left: -2em;
-}
-div.header .name {
-  padding-top: 20px;
-  font-size: 28px;
-  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
-  letter-spacing: -0.005rem;
-  
-  text-transform: uppercase;
-  
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  color: #333333;
-}
-div.header nav {
-  margin-bottom: 16px;
-}
-div.header nav ul {
-  list-style: none;
-  text-align: center;
-  display: -webkit-inline-flex;
-  display: -moz-inline-flex;
-  display: -ms-inline-flexbox;
-  display: -ms-inline-flex;
-  display: inline-flex;
-}
-div.header nav ul li {
-  margin-left: 6px;
-  margin-right: 6px;
-}
-div.header nav ul li:first-child {
-  margin-left: 0;
-}
-div.header nav ul li:last-child {
-  margin-right: 0;
-}
-div.header nav ul a {
-  color: #555555;
-  font-weight: 400;
-  font-size: 14px;
-  text-transform: uppercase;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-}
-div.header nav ul a:hover {
-  color: #111111;
-}
-div.footer .container {
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-  flex-direction: column-reverse;
-  width: 100%;
-  text-align: center;
-}
-div.footer .container a {
-  font-size: 14px;
-  margin-left: 6px;
-  margin-right: 6px;
-  opacity: 0.6;
-  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-}
-div.footer .container a:first-child {
-  margin-left: 0;
-}
-div.footer .container a:last-child {
-  margin-right: 0;
-}
-div.footer .container a:hover {
-  opacity: 0.8;
-}
-div.footer .container a .icon {
-  width: 16px;
-  height: 16px;
-}
-div.footer .container .copyright {
-  flex-grow: 0.5;
-  text-align: start;
-}
-div.footer .container .icons {
-  flex-grow: 0.5;
-  text-align: end;
-}
-div.main .container {
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  justify-content: flex-start;
-}
-div.main .content {
-  color: #111111;
-  font-size: 16px;
-}
-div.main .content .title-container {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-  -ms-justify-content: space-between;
-  justify-content: space-between;
-}
-div.main .content .posts {
-  
-  
-}
-div.main .content .page-heading {
-  font-size: 20px;
-  font-weight: 700;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  letter-spacing: -0.005rem;
-  text-transform: uppercase;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  color: #333333;
-  margin-bottom: 16px;
-}
-div.main .content .front-matter .page-heading {
-  margin-bottom: 0;
-}
-div.main .content .front-matter .meta {
-  font-size: 14px;
-  color: #666666;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  margin-bottom: 32px;
-}
-div.main .content .front-matter .date,
-div.main .content .front-matter .author,
-div.main .content .front-matter .tags,
-div.main .content .front-matter .word-count,
-div.main .content .front-matter .middot:before {
-  display: none;
-}
-div.main .content .front-matter .middot:before {
-  font-size: 6px;
-  margin: 0 6px;
-  vertical-align: middle;
-  content: "•";
-}
-div.main .content .front-matter .tags ul {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-}
-div.main .content .front-matter .tags ul li {
-  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-}
-div.main .content .front-matter .tags ul li:hover {
-  opacity: 0.7;
-}
-div.main .content .front-matter .tags ul li a {
-  color: #666666;
-}
-
-div.main .container.f04 {
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  justify-content: center;
-}
-div.main .container.f04 .content {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-}
-div.main .container.f04 .content .num {
-  margin: 30px 0px 30px 0;
-  font-weight: 400;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 50px;
-}
-div.main .container.f04 .content .detail {
-  margin-bottom: 40px;
-}
-div.main .container .content .groupby {
-  margin-top: 1em;
-  padding-left: 0.5em;
-}
-div.main .container .content .post-item {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  display: list-item;
-  list-style: disc inside;
-}
-div.main .container .content .post-item .meta {
-  font-size: 14px;
-  color: #666666;
-  display: none;
-  min-width: 100px;
-}
-div.main .container .content .see-more {
-  font-style: italic;
-  float: right;
-  font-size: 0.9em;
-  margin-top: 2em;
-  color: #313537;
-}
-div.main .container .content .see-more:hover {
-  color: #666;
-}
-section {
-  padding: 0 16px;
-}
-div.column {
-  padding: 0 16px;
-}
-div.header {
-  padding-top: 10px;
-}
-div.header-home {
-  padding-top: 36px;
-}
-div.main {
-  padding-top: 32px;
-}
-div.main .container .content .post-item .meta {
-    display: block;
-}
-div.main .container .content .post-item {
-    display: flex;
-    list-style: none;
-}
-a {
-  color: #428bca;
-  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
-}
-a:hover {
-  color: #2a6496;
-}
-img {
-  max-width: 100%;
-}
-div.main .content {
-    width: 100%;
-}
-div.main .content .markdown {
-  font-size: 1.1em;
-  line-height: 1.75em;
-  color: #313537;
-  font-family: serif;
-  font-weight: 300;
-}
-div.main .content .markdown h1,
-div.main .content .markdown h2,
-div.main .content .markdown h3,
-div.main .content .markdown h4,
-div.main .content .markdown h5,
-div.main .content .markdown h6 {
-  font-size: 22px;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  letter-spacing: -0.005rem;
-  font-weight: 700;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  color: #333333;
-  text-transform: none;
-  margin-top: 1.75rem;
-}
-div.main .content .markdown h1 {
-  font-size: 1.75rem;
-  margin-bottom: 2rem;
-}
-div.main .content .markdown h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-div.main .content .markdown h3 {
-  font-size: 1em;
-  margin-bottom: 1rem;
-}
-div.main .content .markdown h4,
-div.main .content .markdown h5,
-div.main .content .markdown h6 {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  letter-spacing: none;
-}
-div.main .content .markdown code,
-div.main .content .markdown pre {
-  font-family: 'Menlo', monospace;
-  font-size: 0.98rem;
-  background-color: #f7f7f7;
-}
-div.main .content .markdown code {
-  /* enclosed by single backtick (`) */
-  padding: .15em .5em;
-  border-radius: 2px;
-}
-div.main .content .markdown pre {
-  /* Hugo specific: consider using the 'highlight' shortcode */
-  display: block;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  line-height: 1.5em;
-  white-space: pre;
-  word-break: break-all;
-  word-wrap: break-word;
-}
-div.main .content .markdown pre code {
-  /* enclosed by 4 backticks (````) */
-  padding: 0;
-  font-size: 0.9rem;
-}
-div.main .content .markdown a code {
-  color: #428bca !important;
-}
-div.main .content .markdown a code:hover {
-  text-decoration: underline;
-}
-div.main .content .markdown p {
-  
-  text-align: justify;
-  
-  margin-top: 0;
-  margin-bottom: 1em;
-}
-div.main .content .markdown ul,
-div.main .content .markdown ol,
-div.main .content .markdown dl {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-div.main .content .markdown dt {
-  font-weight: bold;
-}
-div.main .content .markdown dd {
-  margin-bottom: .5rem;
-}
-div.main .content .markdown ul {
-  list-style-type: disc;
-  list-style-position: outside;
-  margin-bottom: 1.25rem;
-}
-div.main .content .markdown ol {
-  list-style-type: decimal;
-  margin-bottom: 1.25rem;
-}
-div.main .content .markdown li {
-  margin-left: 2em;
-}
-div.main .content .markdown em {
-  font-style: italic;
-}
-div.main .content .markdown strong {
-  font-weight: 700;
-}
-div.main .content .markdown hr {
-  position: relative;
-  margin: 1.75rem 0;
-  border: 0;
-  border-top: 1px solid #808080;
-  border-top: 1px solid #999999;
-}
-div.main .content .markdown abbr {
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #666666;
-  text-transform: uppercase;
-}
-div.main .content .markdown abbr[title] {
-  cursor: help;
-  border-bottom: 1px dotted #808080;
-}
-div.main .content .markdown blockquote {
-  padding: .5rem 1rem;
-  margin: .8rem 0;
-  color: #7a7a7a;
-  border-left: .25rem solid #e5e5e5;
-}
-div.main .content .markdown blockquote p:last-child {
-  margin-bottom: 0;
-}
-div.main .content .markdown figure {
-  width: 100%;
-  background: #fff;
-  margin-bottom: 1em;
-}
-div.main .content .markdown figure img {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  display: block;
-  position: static;
-  margin: auto;
-}
-div.main .content .markdown table {
-  margin-bottom: 1rem;
-  width: 100%;
-  border: 1px solid #e5e5e5;
-  border-collapse: collapse;
-}
-div.main .content .markdown td,
-div.main .content .markdown th {
-  padding: .25rem .5rem;
-  border: 1px solid #e5e5e5;
-}
-div.main .content .markdown tbody tr:nth-child(odd) td,
-div.main .content .markdown tbody tr:nth-child(odd) th {
-  background-color: #f7f7f7;
-}
-div.main .content .markdown .footnotes ol {
-  list-style-type: decimal;
-  margin-left: 16px;
-}
-div.main .content .markdown .footnotes li {
-  list-style-type: unset;
-}
-div.main .content .markdown .footnote-ref {
-  font-size: 0.7em;
-}
-div.main .content .navigation {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  padding: 2em;
-}
-div.main .content .navigation div {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  margin-top: 1em;
-}
-div.main .content .navigation .icon {
-  width: 16px;
-  height: 16px;
-}
-div.main .content .navigation a {
-  width: 250px;
-  margin: 0 1em;
-  text-align: center;
-  font-style: italic;
-  color: #313537;
-}
-div.main .content .share, div.main .content .share div {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  align-items: center;
-  justify-content: center;
-}
-div.main .content .share {
-  background-color: rgba(152, 152, 152, 0.07);
-  padding: 1em 0;
-}
-div.main .content .share a {
-  margin: 0 6px;
-}
-kbd {
-  padding: 0.1em 0.6em;
-  border: 1px solid #ccc;
-  font-size: 11px;
-  font-family: Arial,Helvetica,sans-serif;
-  background-color: #f7f7f7;
-  color: #333;
-  -moz-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
-  -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
-  box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  display: inline-block;
-  margin: 0 0.1em;
-  text-shadow: 0 1px 0 #fff;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-/* Fonts */
-
-
-.wf-raleway-n4-active body, 
-.wf-raleway-n4-active div.header nav ul a,
-.wf-raleway-n7-active div.main .content .page-heading,
-.wf-raleway-n2-active div.main .container.f04 .content .num,
-.wf-raleway-n7-active div.main .content .markdown h1,
-.wf-raleway-n7-active div.main .content .markdown h2,
-.wf-raleway-n7-active div.main .content .markdown h3,
-.wf-raleway-n7-active div.main .content .markdown h4,
-.wf-raleway-n7-active div.main .content .markdown h5,
-.wf-raleway-n7-active div.main .content .markdown h6 {
-      font-family: 'Raleway';
-}
-
-.wf-merriweather-n3-active div.main .content .markdown {
-      font-family: 'Merriweather';
-}
-
-.wf-ubuntu-mono-n4-active div.main .content .markdown code,
-.wf-ubuntu-mono-n4-active div.main .content .markdown pre {
-      font-family: 'Ubuntu Mono';
-}
-
-
-</style>
-<style media="(min-width: 600px)">
-  body {
--webkit-justify-content: center;
--moz-justify-content: center;
--ms-justify-content: center;
-justify-content: center;
-}
-.non-narrow.zero-top-spacing {
-padding-top: 0 !important;
-}
-section {
-padding: 0 16px;
-margin-left: 100px;
-margin-right: 100px;
-
-max-width: 750px;
-
-}
-div.column {
-padding: 0 16px;
-
-max-width: 750px;
-
-}
-div.header {
-background-color: transparent;
-}
-div.header .container {
--webkit-justify-content: flex-start;
--moz-justify-content: flex-start;
--ms-justify-content: flex-start;
-justify-content: flex-start;
-}
-div.header .container .logo {
-margin: 0;
-}
-div.header-home .container .logo {
-max-width: 216px;
-margin-left: 24px;
-}
-div.header-home .name-home {
-padding-top: 30px;
-font-size: 40px;
-}
-div.header-home nav ul a {
-font-size: 18px;
-}
-div.header .content {
--webkit-align-items: flex-start;
--moz-align-items: flex-start;
--ms-align-items: flex-start;
-align-items: flex-start;
-}
-div.header .name {
-color: #333333;
-}
-div.header nav {
-font-size: 14px;
-margin-bottom: 0;
-}
-div.header nav ul {
-text-align: left;
-}
-div.header nav ul a {
-color: #666666;
-}
-div.header nav ul a:hover {
-color: #333333;
-}
-div.footer {
-background-color: transparent;
-}
-div.footer .container {
-flex-direction: row;
-}
-div.footer .container a {
-margin-left: 3px;
-margin-right: 3px;
-color: #666666;
-}
-div.footer .container a:hover {
-color: #333333;
-}
-div.footer .container a .icon {
-font-size: 18px;
-}
-div.footer .container a .icon.larger {
-font-size: 20px;
-}
-div.main .content .front-matter .date,
-div.main .content .front-matter .author,
-div.main .content .front-matter .tags,
-div.main .content .front-matter .word-count,
-div.main .content .front-matter .middot:before {
-display: initial;
-}
-div.main .container.f04 {
--webkit-justify-content: flex-start;
--moz-justify-content: flex-start;
--ms-justify-content: flex-start;
-justify-content: flex-start;
-}
-div.main .container.f04 .content {
--webkit-align-items: flex-start;
--moz-align-items: flex-start;
--ms-align-items: flex-start;
-align-items: flex-start;
-}
-div.main .container.f04 .content .num {
-margin: 0 0 10px 0;
-font-size: 32px;
-}
-div.main .container.f04 .content .detail {
-margin-bottom: 30px;
-}
-.container {
-padding: 0 30px;
-}
-div.header {
-padding-top: 60px;
-padding-bottom: 60px;
-}
-div.footer {
-padding-top: 60px;
-padding-bottom: 60px;
-}
-div.main {
-padding-top: 0;
-}
-div.main .content {
-  
-  font-size: 16px;
-  
-}
-div.main .container .content .post-item {
-display: flex;
-list-style: none;
-padding-left: 1.5em;
-}
-div.main .container .content .post-item .meta {
-display: block;
-}
-div.main .content .markdown blockquote {
-padding-right: 5rem;
-padding-left: 1.25rem;
-}
-div.main .content .navigation {
--webkit-flex-direction: row;
--moz-flex-direction: row;
--ms-flex-direction: row;
-flex-direction: row;
-}
-div.main .content .navigation div {
-margin-top: 0em;
-}
-
-</style>
-<style media="(min-width: 769px)">
-  div.main .content .markdown figure {
-width: 110%;
-margin-left: -4%;
-}
-div.main .content .markdown img {
-max-width: 110%;
-width: 110%;
-margin-left: -4%;
-}
-div.main .content .markdown pre {
-width: 110%;
-margin-left: -4%;
-}
-
-</style>
-
-<noscript>
-  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
-</noscript>
-
-
-  <style type="text/css" media="screen">
-    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
-  </style>
 
 
 
 
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
 
 
 
 
-  <link rel="stylesheet" href="/css/override.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="/css/reset.css?t=2020-05-12%2009%3a29%3a45.3022795%20-0400%20EDT%20m%3d%2b0.143162201">
+    <link rel="stylesheet" href="/css/pygments.css?t=2020-05-12%2009%3a29%3a45.3022795%20-0400%20EDT%20m%3d%2b0.143162201">
+    <link rel="stylesheet" href="/css/main.css?t=2020-05-12%2009%3a29%3a45.3022795%20-0400%20EDT%20m%3d%2b0.143162201">
+    
+        <link rel="stylesheet" href="/css/override.css?t=2020-05-12%2009%3a29%3a45.3022795%20-0400%20EDT%20m%3d%2b0.143162201">
+    
+
 
 
 
 <link rel="shortcut icon"
 
-    href="/img/favicon.ico"
+    href="/img/leaf.ico"
 
 >
+
+
+
+
 
 
 
@@ -986,100 +73,144 @@ margin-left: -4%;
 </head>
 
 
-<body>
+<body lang="en">
 
-
-<div class="header column">
-
+<section class="header">
     <div class="container">
-        
-        <a href="https://github.com/mtn/cocoa-eh-hugo-theme/wiki/Configuration#logo">Logo HOWTO</a>
-        
         <div class="content">
-            <a href="/"><div class="name"><h1>Louis Maiden</h1></div></a>
+            
+                
+                
+                
+                
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        
+                    
+                
+                    
+                        
+                    
+                
+                    
+                        
+                    
+                
+                    
+                
+                
+                <a href="/"><img class="avatar" src="/img/profile.png" srcset="/img/profile.png 1x,/img/profile-2x.png 2x,/img/profile-3x.png 3x,/img/profile-4x.png 4x"></a>
+            
+            <a href="/"><div class="name">Louis Maiden</div></a>
+            
             <nav>
                 <ul>
                     
-                            <li><a href="/blog/">Blog</a></li>
+                        <li class="nav-blog"><a href="/blog/"><span>Blog</span></a></li>
                     
+                        <li class="nav-about"><a href="/about/"><span>About</span></a></li>
                     
-                        
-                            
-                            <li><a href="/post">post</a></li>
-                            
-                        
-                    
-                        
-                            
-                            <li><a href="/about">about</a></li>
-                            
-                        
-                    
-                        
-                            
-                        
-                    
-                        
-                    
+                        <li class="nav-code"><a href="/code/"><span>Code</span></a></li>
                     
                 </ul>
             </nav>
         </div>
     </div>
-</div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+        
+            <a href="//github.com/you" target="_blank" rel="noopener"><img class="icon" src="/img/github.svg" alt="github" /></a>
+        
+
+        
+
+        
+            <a href="//twitter.com/you" target="_blank" rel="noopener"><img class="icon" src="/img/twitter.svg" alt="twitter" /></a>
+        
+
+	
+
+        
+
+        
+            <a href="//example.com/@you" target="_blank" rel="noopener"><img class="icon" src="/img/mastodon.svg" alt="mastodon" /></a>
+        
+
+        
+            <a href="//linkedin.com/in/you" target="_blank" rel="noopener"><img class="icon" src="/img/linkedin.svg" alt="linkedin" /></a>
+        
+
+        
+
+        
+            <a href="//t.me/you" target="_blank" rel="noopener"><img class="icon" src="/img/telegram.svg" alt="telegram" /></a>
+        
+
+        
+            <a href="//instagram.com/you" target="_blank" rel="noopener"><img class="icon" src="/img/instagram.svg" alt="instagram" /></a>
+        
+
+        
+            <a href="//500px.com/username" target="_blank" rel="noopener"><img class="icon" src="/img/500px.svg" alt="500px" /></a>
+        
+
+        
+
+        
+            <a href="mailto:you@example.space"><img class="icon" src="/img/email.svg" alt="email" /></a>
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
 
 
-
-
-
-<div class="main post non-narrow zero-top-spacing column">
+<section class="main post non-narrow zero-top-spacing">
     <div class="container">
         <div class="content">
             <div class="front-matter">
                 <div class="title-container">
                     <div class="page-heading">
 
-    
     Proving the Central Limit Theorem using R
-    
 
 </div>
 
+                    <div class="initials"><a href="/">ad</a></div>
                 </div>
                 <div class="meta">
-                    <div class="date" title="Mon Feb 26 2018 00:00:00 UTC">Feb 26, 2018</div>
                     
-                        
-                    
-                    
-                    <div class="reading-time middot">8 minute read</div>
+                    <div class="date" title='Mon Feb 26 2018 00:00:00 UTC'>Feb 26, 2018</div>
                     
                     
-                      <div class="tags">
+		    <div class="reading-time"><div class="middot"></div>8 minutes read</div>
                     
-                        <ul>
-                          
-                        </ul>
-                    </div>
-                    <div class="tags">
-                        <ul>
-                          
-                          
-                        </ul>
-                    </div>
                 </div>
             </div>
             <div class="markdown">
                 
-    
-<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
-<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
-<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
-<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
-<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
-<link href="/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+<script src="/louismaiden.netlify.comrmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/louismaiden.netlify.comrmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/louismaiden.netlify.comrmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/louismaiden.netlify.comrmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/louismaiden.netlify.comrmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/louismaiden.netlify.comrmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/louismaiden.netlify.comrmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/louismaiden.netlify.comrmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
 
 
 <div id="what-is-the-central-limit-theorem" class="section level2">
@@ -1124,7 +255,7 @@ p2 &lt;- ggplotly(sample_means)
 
 subplot(p1, p2)</code></pre>
 <div id="htmlwidget-1" style="width:672px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"data":[{"orientation":"v","width":[0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206899],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0,0.0344827586206897,0.0689655172413793,0.103448275862069,0.137931034482759,0.172413793103448,0.206896551724138,0.241379310344828,0.275862068965517,0.310344827586207,0.344827586206897,0.379310344827586,0.413793103448276,0.448275862068966,0.482758620689655,0.517241379310345,0.551724137931034,0.586206896551724,0.620689655172414,0.655172413793103,0.689655172413793,0.724137931034483,0.758620689655172,0.793103448275862,0.827586206896552,0.862068965517241,0.896551724137931,0.931034482758621,0.96551724137931,1],"y":[1485,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6015],"text":["count: 1485<br />samps: 0.00000000","count:    0<br />samps: 0.03448276","count:    0<br />samps: 0.06896552","count:    0<br />samps: 0.10344828","count:    0<br />samps: 0.13793103","count:    0<br />samps: 0.17241379","count:    0<br />samps: 0.20689655","count:    0<br />samps: 0.24137931","count:    0<br />samps: 0.27586207","count:    0<br />samps: 0.31034483","count:    0<br />samps: 0.34482759","count:    0<br />samps: 0.37931034","count:    0<br />samps: 0.41379310","count:    0<br />samps: 0.44827586","count:    0<br />samps: 0.48275862","count:    0<br />samps: 0.51724138","count:    0<br />samps: 0.55172414","count:    0<br />samps: 0.58620690","count:    0<br />samps: 0.62068966","count:    0<br />samps: 0.65517241","count:    0<br />samps: 0.68965517","count:    0<br />samps: 0.72413793","count:    0<br />samps: 0.75862069","count:    0<br />samps: 0.79310345","count:    0<br />samps: 0.82758621","count:    0<br />samps: 0.86206897","count:    0<br />samps: 0.89655172","count:    0<br />samps: 0.93103448","count:    0<br />samps: 0.96551724","count: 6015<br />samps: 1.00000000"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0.636551724137931,0.64551724137931,0.65448275862069,0.663448275862069,0.672413793103448,0.681379310344828,0.690344827586207,0.699310344827586,0.708275862068966,0.717241379310345,0.726206896551724,0.735172413793103,0.744137931034483,0.753103448275862,0.762068965517241,0.771034482758621,0.78,0.788965517241379,0.797931034482759,0.806896551724138,0.815862068965517,0.824827586206897,0.833793103448276,0.842758620689655,0.851724137931035,0.860689655172414,0.869655172413793,0.878620689655172,0.887586206896552,0.896551724137931],"y":[1,0,0,1,0,4,0,5,0,9,0,0,11,0,14,0,11,0,19,0,19,0,0,24,0,15,0,10,0,7],"text":["count:  1<br />samp.means: 0.6365517","count:  0<br />samp.means: 0.6455172","count:  0<br />samp.means: 0.6544828","count:  1<br />samp.means: 0.6634483","count:  0<br />samp.means: 0.6724138","count:  4<br />samp.means: 0.6813793","count:  0<br />samp.means: 0.6903448","count:  5<br />samp.means: 0.6993103","count:  0<br />samp.means: 0.7082759","count:  9<br />samp.means: 0.7172414","count:  0<br />samp.means: 0.7262069","count:  0<br />samp.means: 0.7351724","count: 11<br />samp.means: 0.7441379","count:  0<br />samp.means: 0.7531034","count: 14<br />samp.means: 0.7620690","count:  0<br />samp.means: 0.7710345","count: 11<br />samp.means: 0.7800000","count:  0<br />samp.means: 0.7889655","count: 19<br />samp.means: 0.7979310","count:  0<br />samp.means: 0.8068966","count: 19<br />samp.means: 0.8158621","count:  0<br />samp.means: 0.8248276","count:  0<br />samp.means: 0.8337931","count: 24<br />samp.means: 0.8427586","count:  0<br />samp.means: 0.8517241","count: 15<br />samp.means: 0.8606897","count:  0<br />samp.means: 0.8696552","count: 10<br />samp.means: 0.8786207","count:  0<br />samp.means: 0.8875862","count:  7<br />samp.means: 0.8965517"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"type":"linear","autorange":false,"range":[-0.0689655172413793,1.06896551724138],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"xaxis2":{"domain":[0.52,1],"automargin":true,"type":"linear","autorange":false,"range":[0.618620689655172,0.91448275862069],"tickmode":"array","ticktext":["0.7","0.8","0.9"],"tickvals":[0.7,0.8,0.9],"categoryorder":"array","categoryarray":["0.7","0.8","0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1.2,25.2],"tickmode":"array","ticktext":["0","5","10","15","20","25"],"tickvals":[0,5,10,15,20,25],"categoryorder":"array","categoryarray":["0","5","10","15","20","25"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-300.75,6315.75],"tickmode":"array","ticktext":["0","2000","4000","6000"],"tickvals":[0,2000,4000,6000],"categoryorder":"array","categoryarray":["0","2000","4000","6000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":0.48,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0.52,"x1":1,"y0":0,"y1":1}],"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":22.648401826484},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"attrs":{"5f88f70644f":{"x":{},"type":"bar"},"5f885a78199d":{"x":{},"type":"bar"}},"source":"A","config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"data":[{"orientation":"v","width":[0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206899],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0,0.0344827586206897,0.0689655172413793,0.103448275862069,0.137931034482759,0.172413793103448,0.206896551724138,0.241379310344828,0.275862068965517,0.310344827586207,0.344827586206897,0.379310344827586,0.413793103448276,0.448275862068966,0.482758620689655,0.517241379310345,0.551724137931034,0.586206896551724,0.620689655172414,0.655172413793103,0.689655172413793,0.724137931034483,0.758620689655172,0.793103448275862,0.827586206896552,0.862068965517241,0.896551724137931,0.931034482758621,0.96551724137931,1],"y":[1485,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6015],"text":["count: 1485<br />samps: 0.00000000","count:    0<br />samps: 0.03448276","count:    0<br />samps: 0.06896552","count:    0<br />samps: 0.10344828","count:    0<br />samps: 0.13793103","count:    0<br />samps: 0.17241379","count:    0<br />samps: 0.20689655","count:    0<br />samps: 0.24137931","count:    0<br />samps: 0.27586207","count:    0<br />samps: 0.31034483","count:    0<br />samps: 0.34482759","count:    0<br />samps: 0.37931034","count:    0<br />samps: 0.41379310","count:    0<br />samps: 0.44827586","count:    0<br />samps: 0.48275862","count:    0<br />samps: 0.51724138","count:    0<br />samps: 0.55172414","count:    0<br />samps: 0.58620690","count:    0<br />samps: 0.62068966","count:    0<br />samps: 0.65517241","count:    0<br />samps: 0.68965517","count:    0<br />samps: 0.72413793","count:    0<br />samps: 0.75862069","count:    0<br />samps: 0.79310345","count:    0<br />samps: 0.82758621","count:    0<br />samps: 0.86206897","count:    0<br />samps: 0.89655172","count:    0<br />samps: 0.93103448","count:    0<br />samps: 0.96551724","count: 6015<br />samps: 1.00000000"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939,0.00896551724137939],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0.636551724137931,0.64551724137931,0.65448275862069,0.663448275862069,0.672413793103448,0.681379310344828,0.690344827586207,0.699310344827586,0.708275862068966,0.717241379310345,0.726206896551724,0.735172413793103,0.744137931034483,0.753103448275862,0.762068965517241,0.771034482758621,0.78,0.788965517241379,0.797931034482759,0.806896551724138,0.815862068965517,0.824827586206897,0.833793103448276,0.842758620689655,0.851724137931035,0.860689655172414,0.869655172413793,0.878620689655172,0.887586206896552,0.896551724137931],"y":[1,0,0,1,0,4,0,5,0,9,0,0,11,0,14,0,11,0,19,0,19,0,0,24,0,15,0,10,0,7],"text":["count:  1<br />samp.means: 0.6365517","count:  0<br />samp.means: 0.6455172","count:  0<br />samp.means: 0.6544828","count:  1<br />samp.means: 0.6634483","count:  0<br />samp.means: 0.6724138","count:  4<br />samp.means: 0.6813793","count:  0<br />samp.means: 0.6903448","count:  5<br />samp.means: 0.6993103","count:  0<br />samp.means: 0.7082759","count:  9<br />samp.means: 0.7172414","count:  0<br />samp.means: 0.7262069","count:  0<br />samp.means: 0.7351724","count: 11<br />samp.means: 0.7441379","count:  0<br />samp.means: 0.7531034","count: 14<br />samp.means: 0.7620690","count:  0<br />samp.means: 0.7710345","count: 11<br />samp.means: 0.7800000","count:  0<br />samp.means: 0.7889655","count: 19<br />samp.means: 0.7979310","count:  0<br />samp.means: 0.8068966","count: 19<br />samp.means: 0.8158621","count:  0<br />samp.means: 0.8248276","count:  0<br />samp.means: 0.8337931","count: 24<br />samp.means: 0.8427586","count:  0<br />samp.means: 0.8517241","count: 15<br />samp.means: 0.8606897","count:  0<br />samp.means: 0.8696552","count: 10<br />samp.means: 0.8786207","count:  0<br />samp.means: 0.8875862","count:  7<br />samp.means: 0.8965517"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"type":"linear","autorange":false,"range":[-0.0689655172413793,1.06896551724138],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"xaxis2":{"domain":[0.52,1],"automargin":true,"type":"linear","autorange":false,"range":[0.618620689655172,0.91448275862069],"tickmode":"array","ticktext":["0.7","0.8","0.9"],"tickvals":[0.7,0.8,0.9],"categoryorder":"array","categoryarray":["0.7","0.8","0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1.2,25.2],"tickmode":"array","ticktext":["0","5","10","15","20","25"],"tickvals":[0,5,10,15,20,25],"categoryorder":"array","categoryarray":["0","5","10","15","20","25"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-300.75,6315.75],"tickmode":"array","ticktext":["0","2000","4000","6000"],"tickvals":[0,2000,4000,6000],"categoryorder":"array","categoryarray":["0","2000","4000","6000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":0.48,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0.52,"x1":1,"y0":0,"y1":1}],"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":22.648401826484},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"attrs":{"4484700c4001":{"x":{},"type":"bar"},"44842fe479e4":{"x":{},"type":"bar"}},"source":"A","config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
 <p>On the left the dummy appears as we expect, with around 20% of observations at 0 and about 80% at 1. The right hand side shows the distribution of sample means, which is a bit too skewed to be considered normal. As per the CLT, let’s ramp up the size of <code>t</code> &amp; <code>n</code> and see what happens.</p>
 <pre class="r"><code>t &lt;- 1500
 n &lt;- 500
@@ -1140,7 +271,7 @@ p2 &lt;- ggplotly(sample_means)
 
 subplot(p1, p2)</code></pre>
 <div id="htmlwidget-2" style="width:672px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2">{"x":{"data":[{"orientation":"v","width":[0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206899],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0,0.0344827586206897,0.0689655172413793,0.103448275862069,0.137931034482759,0.172413793103448,0.206896551724138,0.241379310344828,0.275862068965517,0.310344827586207,0.344827586206897,0.379310344827586,0.413793103448276,0.448275862068966,0.482758620689655,0.517241379310345,0.551724137931034,0.586206896551724,0.620689655172414,0.655172413793103,0.689655172413793,0.724137931034483,0.758620689655172,0.793103448275862,0.827586206896552,0.862068965517241,0.896551724137931,0.931034482758621,0.96551724137931,1],"y":[150233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,599767],"text":["count: 150233<br />samps: 0.00000000","count:      0<br />samps: 0.03448276","count:      0<br />samps: 0.06896552","count:      0<br />samps: 0.10344828","count:      0<br />samps: 0.13793103","count:      0<br />samps: 0.17241379","count:      0<br />samps: 0.20689655","count:      0<br />samps: 0.24137931","count:      0<br />samps: 0.27586207","count:      0<br />samps: 0.31034483","count:      0<br />samps: 0.34482759","count:      0<br />samps: 0.37931034","count:      0<br />samps: 0.41379310","count:      0<br />samps: 0.44827586","count:      0<br />samps: 0.48275862","count:      0<br />samps: 0.51724138","count:      0<br />samps: 0.55172414","count:      0<br />samps: 0.58620690","count:      0<br />samps: 0.62068966","count:      0<br />samps: 0.65517241","count:      0<br />samps: 0.68965517","count:      0<br />samps: 0.72413793","count:      0<br />samps: 0.75862069","count:      0<br />samps: 0.79310345","count:      0<br />samps: 0.82758621","count:      0<br />samps: 0.86206897","count:      0<br />samps: 0.89655172","count:      0<br />samps: 0.93103448","count:      0<br />samps: 0.96551724","count: 599767<br />samps: 1.00000000"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0.739034482758621,0.742965517241379,0.746896551724138,0.750827586206896,0.754758620689655,0.758689655172414,0.762620689655172,0.766551724137931,0.77048275862069,0.774413793103448,0.778344827586207,0.782275862068965,0.786206896551724,0.790137931034483,0.794068965517241,0.798,0.801931034482759,0.805862068965517,0.809793103448276,0.813724137931034,0.817655172413793,0.821586206896552,0.82551724137931,0.829448275862069,0.833379310344827,0.837310344827586,0.841241379310345,0.845172413793103,0.849103448275862,0.853034482758621],"y":[1,1,3,4,6,8,22,27,31,48,77,78,110,110,115,69,138,129,114,120,83,66,54,32,24,11,7,5,6,1],"text":["count:   1<br />samp.means: 0.7390345","count:   1<br />samp.means: 0.7429655","count:   3<br />samp.means: 0.7468966","count:   4<br />samp.means: 0.7508276","count:   6<br />samp.means: 0.7547586","count:   8<br />samp.means: 0.7586897","count:  22<br />samp.means: 0.7626207","count:  27<br />samp.means: 0.7665517","count:  31<br />samp.means: 0.7704828","count:  48<br />samp.means: 0.7744138","count:  77<br />samp.means: 0.7783448","count:  78<br />samp.means: 0.7822759","count: 110<br />samp.means: 0.7862069","count: 110<br />samp.means: 0.7901379","count: 115<br />samp.means: 0.7940690","count:  69<br />samp.means: 0.7980000","count: 138<br />samp.means: 0.8019310","count: 129<br />samp.means: 0.8058621","count: 114<br />samp.means: 0.8097931","count: 120<br />samp.means: 0.8137241","count:  83<br />samp.means: 0.8176552","count:  66<br />samp.means: 0.8215862","count:  54<br />samp.means: 0.8255172","count:  32<br />samp.means: 0.8294483","count:  24<br />samp.means: 0.8333793","count:  11<br />samp.means: 0.8373103","count:   7<br />samp.means: 0.8412414","count:   5<br />samp.means: 0.8451724","count:   6<br />samp.means: 0.8491034","count:   1<br />samp.means: 0.8530345"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"type":"linear","autorange":false,"range":[-0.0689655172413793,1.06896551724138],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"xaxis2":{"domain":[0.52,1],"automargin":true,"type":"linear","autorange":false,"range":[0.731172413793103,0.860896551724138],"tickmode":"array","ticktext":["0.750","0.775","0.800","0.825","0.850"],"tickvals":[0.75,0.775,0.8,0.825,0.85],"categoryorder":"array","categoryarray":["0.750","0.775","0.800","0.825","0.850"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-6.9,144.9],"tickmode":"array","ticktext":["0","50","100"],"tickvals":[0,50,100],"categoryorder":"array","categoryarray":["0","50","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-29988.35,629755.35],"tickmode":"array","ticktext":["0e+00","2e+05","4e+05","6e+05"],"tickvals":[0,200000,400000,600000],"categoryorder":"array","categoryarray":["0e+00","2e+05","4e+05","6e+05"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":0.48,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0.52,"x1":1,"y0":0,"y1":1}],"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":28.4931506849315},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"attrs":{"5f883ed23a41":{"x":{},"type":"bar"},"5f887c5ff44":{"x":{},"type":"bar"}},"source":"A","config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"data":[{"orientation":"v","width":[0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206897,0.0344827586206896,0.0344827586206897,0.0344827586206896,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206895,0.0344827586206895,0.0344827586206897,0.0344827586206899],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0,0.0344827586206897,0.0689655172413793,0.103448275862069,0.137931034482759,0.172413793103448,0.206896551724138,0.241379310344828,0.275862068965517,0.310344827586207,0.344827586206897,0.379310344827586,0.413793103448276,0.448275862068966,0.482758620689655,0.517241379310345,0.551724137931034,0.586206896551724,0.620689655172414,0.655172413793103,0.689655172413793,0.724137931034483,0.758620689655172,0.793103448275862,0.827586206896552,0.862068965517241,0.896551724137931,0.931034482758621,0.96551724137931,1],"y":[150233,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,599767],"text":["count: 150233<br />samps: 0.00000000","count:      0<br />samps: 0.03448276","count:      0<br />samps: 0.06896552","count:      0<br />samps: 0.10344828","count:      0<br />samps: 0.13793103","count:      0<br />samps: 0.17241379","count:      0<br />samps: 0.20689655","count:      0<br />samps: 0.24137931","count:      0<br />samps: 0.27586207","count:      0<br />samps: 0.31034483","count:      0<br />samps: 0.34482759","count:      0<br />samps: 0.37931034","count:      0<br />samps: 0.41379310","count:      0<br />samps: 0.44827586","count:      0<br />samps: 0.48275862","count:      0<br />samps: 0.51724138","count:      0<br />samps: 0.55172414","count:      0<br />samps: 0.58620690","count:      0<br />samps: 0.62068966","count:      0<br />samps: 0.65517241","count:      0<br />samps: 0.68965517","count:      0<br />samps: 0.72413793","count:      0<br />samps: 0.75862069","count:      0<br />samps: 0.79310345","count:      0<br />samps: 0.82758621","count:      0<br />samps: 0.86206897","count:      0<br />samps: 0.89655172","count:      0<br />samps: 0.93103448","count:      0<br />samps: 0.96551724","count: 599767<br />samps: 1.00000000"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856,0.00393103448275856],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[0.739034482758621,0.742965517241379,0.746896551724138,0.750827586206896,0.754758620689655,0.758689655172414,0.762620689655172,0.766551724137931,0.77048275862069,0.774413793103448,0.778344827586207,0.782275862068965,0.786206896551724,0.790137931034483,0.794068965517241,0.798,0.801931034482759,0.805862068965517,0.809793103448276,0.813724137931034,0.817655172413793,0.821586206896552,0.82551724137931,0.829448275862069,0.833379310344827,0.837310344827586,0.841241379310345,0.845172413793103,0.849103448275862,0.853034482758621],"y":[1,1,3,4,6,8,22,27,31,48,77,78,110,110,115,69,138,129,114,120,83,66,54,32,24,11,7,5,6,1],"text":["count:   1<br />samp.means: 0.7390345","count:   1<br />samp.means: 0.7429655","count:   3<br />samp.means: 0.7468966","count:   4<br />samp.means: 0.7508276","count:   6<br />samp.means: 0.7547586","count:   8<br />samp.means: 0.7586897","count:  22<br />samp.means: 0.7626207","count:  27<br />samp.means: 0.7665517","count:  31<br />samp.means: 0.7704828","count:  48<br />samp.means: 0.7744138","count:  77<br />samp.means: 0.7783448","count:  78<br />samp.means: 0.7822759","count: 110<br />samp.means: 0.7862069","count: 110<br />samp.means: 0.7901379","count: 115<br />samp.means: 0.7940690","count:  69<br />samp.means: 0.7980000","count: 138<br />samp.means: 0.8019310","count: 129<br />samp.means: 0.8058621","count: 114<br />samp.means: 0.8097931","count: 120<br />samp.means: 0.8137241","count:  83<br />samp.means: 0.8176552","count:  66<br />samp.means: 0.8215862","count:  54<br />samp.means: 0.8255172","count:  32<br />samp.means: 0.8294483","count:  24<br />samp.means: 0.8333793","count:  11<br />samp.means: 0.8373103","count:   7<br />samp.means: 0.8412414","count:   5<br />samp.means: 0.8451724","count:   6<br />samp.means: 0.8491034","count:   1<br />samp.means: 0.8530345"],"type":"bar","marker":{"autocolorscale":false,"color":"rgba(89,89,89,1)","line":{"width":1.88976377952756,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"type":"linear","autorange":false,"range":[-0.0689655172413793,1.06896551724138],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"xaxis2":{"domain":[0.52,1],"automargin":true,"type":"linear","autorange":false,"range":[0.731172413793103,0.860896551724138],"tickmode":"array","ticktext":["0.750","0.775","0.800","0.825","0.850"],"tickvals":[0.75,0.775,0.8,0.825,0.85],"categoryorder":"array","categoryarray":["0.750","0.775","0.800","0.825","0.850"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-6.9,144.9],"tickmode":"array","ticktext":["0","50","100"],"tickvals":[0,50,100],"categoryorder":"array","categoryarray":["0","50","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x2","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-29988.35,629755.35],"tickmode":"array","ticktext":["0e+00","2e+05","4e+05","6e+05"],"tickvals":[0,200000,400000,600000],"categoryorder":"array","categoryarray":["0e+00","2e+05","4e+05","6e+05"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":0.48,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0.52,"x1":1,"y0":0,"y1":1}],"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":28.4931506849315},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"attrs":{"448446967f58":{"x":{},"type":"bar"},"4484686577f9":{"x":{},"type":"bar"}},"source":"A","config":{"doubleClick":"reset","modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
 <p>With the increased sample, one can see the smooth bell shaped curve emerging on the right-hand side. Hovering over the middle of this distribution will show its center around our defined mean of .8, thanks to the magic of the central limit theorem.</p>
 </div>
 <div id="small-samples" class="section level2">
@@ -1152,11 +283,10 @@ subplot(p1, p2)</code></pre>
 </ul>
 </div>
 
-
+                <br>
+                
+                <p class="back-to-posts"><a href="/blog">Back to posts</a></p>
             </div>
-            
-            
-            
             <br>
             <div class="disqus">
                 <div id="disqus_thread"></div>
@@ -1181,99 +311,9 @@ subplot(p1, p2)</code></pre>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
             </div>
             
-
-            
-            
-
-            
-
-            
         </div>
     </div>
-</div>
-
-
-
-<div class="footer column">
-    <div class="container">
-
-        
-
-        
-
-        <div class="copyright">
-
-        
-
-        </div>
-        <div class="icons">
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-            <a href="https://twitter.com/https://twitter.com/ljm2174" rel=me target="_blank">
-                <img class="icon" src="/img/twitter.svg" alt="twitter" />
-            </a>
-        
-
-        
-            <a href="https://www.linkedin.com/in/https://www.linkedin.com/in/louis-maiden-37446525/" rel=me target="_blank">
-                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
-            </a>
-        
-
-        
-
-        
-
-        
-            <a href="mailto:louismaiden@gmail.com">
-                <img class="icon" src="/img/email.svg" alt="email" />
-            </a>
-        
-
-        
-            <a href="/index.xml">
-                <img class="icon" src="/img/rss.svg" alt="rss" />
-            </a>
-        
-
-        </div>
-    </div>
-</div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-<script>
-  WebFont.load({
-    google: {
-      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
-    }
-  });
-</script>
-
-
-
-  <script src="/js/highlight.min.js" defer></script>
-  
-
-
-
-
-
-
+</section>
 
 
 
@@ -1281,7 +321,7 @@ subplot(p1, p2)</code></pre>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-127707555-1', 'auto');
+	ga('create', 'UA-123-45', 'auto');
 	
 	ga('send', 'pageview');
 }
@@ -1289,15 +329,14 @@ if (!doNotTrack) {
 <script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
-<script>
-  window.onload = function() {
-    
-      hljs.initHighlighting();
-    
-    
-    
-  };
-</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
 
 
 

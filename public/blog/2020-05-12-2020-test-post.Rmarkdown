@@ -8,3 +8,22 @@ tags: []
 ---
 
 This is a test
+
+
+```{r, include = FALSE, echo = FALSE}
+library(tidyverse)
+library(plotly)
+
+```
+
+
+
+```{r}
+
+p <- mtcars %>% 
+  ggplot(aes(mpg, cyl)) +
+  geom_point()
+
+
+ggplotly(p)
+```
