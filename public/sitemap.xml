@@ -3,32 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/</loc>
-    <lastmod>2020-05-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2020-05-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/blog/test-et/</loc>
-    <lastmod>2020-05-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/test-et/</loc>
-    <lastmod>2020-05-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/blog/tennis-one-handed-backhand/</loc>
     <lastmod>2019-05-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/tennis-one-handed-backhand/</loc>
+    <lastmod>2019-05-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-05-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
     <lastmod>2019-05-07T00:00:00+00:00</lastmod>
   </url>
   

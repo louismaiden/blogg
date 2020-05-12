@@ -12,33 +12,6 @@
     
     
     <item>
-      <title>test et</title>
-      <link>/blog/test-et/</link>
-      <pubDate>Tue, 12 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/test-et/</guid>
-      <description>NEWW
-p &amp;lt;- mtcars %&amp;gt;% ggplot(aes(mpg, cyl)) +geom_point()ggplotly(p){&#34;x&#34;:{&#34;data&#34;:[{&#34;x&#34;:[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],&#34;y&#34;:[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],&#34;text&#34;:[&#34;mpg: 21.0
-cyl: 6&#34;,&#34;mpg: 21.0
-cyl: 6&#34;,&#34;mpg: 22.8
-cyl: 4&#34;,&#34;mpg: 21.4
-cyl: 6&#34;,&#34;mpg: 18.7
-cyl: 8&#34;,&#34;mpg: 18.1
-cyl: 6&#34;,&#34;mpg: 14.3
-cyl: 8&#34;,&#34;mpg: 24.4
-cyl: 4&#34;,&#34;mpg: 22.8
-cyl: 4&#34;,&#34;mpg: 19.2
-cyl: 6&#34;,&#34;mpg: 17.8
-cyl: 6&#34;,&#34;mpg: 16.4
-cyl: 8&#34;,&#34;mpg: 17.3
-cyl: 8&#34;,&#34;mpg: 15.2
-cyl: 8&#34;,&#34;mpg: 10.4
-cyl: 8&#34;,&#34;mpg: 10.4
-cyl: 8&#34;,&#34;mpg: 14.7
-cyl: 8&#34;,&#34;mpg: 32.</description>
-    </item>
-    
-    <item>
       <title>Enjoy Tennis&#39;s One-Handed Backhand? It Could Be Gone By 2030</title>
       <link>/blog/tennis-one-handed-backhand/</link>
       <pubDate>Tue, 07 May 2019 00:00:00 +0000</pubDate>
