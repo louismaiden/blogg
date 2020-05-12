@@ -9,10 +9,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
 <meta name="author" content="Louis Maiden">
-<meta name="description" content="library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as.character(date),date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% pull()counter &lt;- 0df_main &lt;- tibble()for (date in dates) {print(as.character(date))print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))link &lt;- paste0(&quot;https://www.">
+<meta name="description" content="I had some requests regarding how I scraped the atptour.com’s past statistics on player rankings, so I thought I’d post the raw code and eventually turn this into a tutorial for advanced scraping.
+library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as.">
 
 <meta property="og:title" content="ATP World Tour Website Scraping" />
-<meta property="og:description" content="library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as.character(date),date = date %&gt;% str_replace_all(&quot;\\-&quot;,&quot;\\.&quot;)) %&gt;% pull()counter &lt;- 0df_main &lt;- tibble()for (date in dates) {print(as.character(date))print(paste0((100*(counter / length(dates))),&quot;% Finished&quot;))link &lt;- paste0(&quot;https://www." />
+<meta property="og:description" content="I had some requests regarding how I scraped the atptour.com’s past statistics on player rankings, so I thought I’d post the raw code and eventually turn this into a tutorial for advanced scraping.
+library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() &#43;theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) &#43;theme(axis.title.y = element_text(angle = 0)))dates &lt;- read_csv(&quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&quot;, col_names = FALSE) %&gt;% select(date = 1) %&gt;% mutate(date = dmy(date),year = year(date)) %&gt;% filter(date &gt;= &quot;1970-01-01&quot; &amp; date &lt; &quot;1978-02-05&quot;) %&gt;% select(-year) %&gt;% mutate(date = as." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/blog/atp-world-tour-website-scraping/" />
 <meta property="article:published_time" content="2020-05-12T00:00:00+00:00" />
@@ -43,11 +45,11 @@
 
 
     
-    <link rel="stylesheet" href="/css/reset.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
-    <link rel="stylesheet" href="/css/pygments.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
-    <link rel="stylesheet" href="/css/main.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+    <link rel="stylesheet" href="/css/reset.css?t=2020-05-12%2015%3a12%3a21.1905851%20-0400%20EDT%20m%3d%2b0.152549701">
+    <link rel="stylesheet" href="/css/pygments.css?t=2020-05-12%2015%3a12%3a21.1905851%20-0400%20EDT%20m%3d%2b0.152549701">
+    <link rel="stylesheet" href="/css/main.css?t=2020-05-12%2015%3a12%3a21.1905851%20-0400%20EDT%20m%3d%2b0.152549701">
     
-        <link rel="stylesheet" href="/css/override.css?t=2020-05-12%2015%3a05%3a10.3020668%20-0400%20EDT%20m%3d%2b0.157577301">
+        <link rel="stylesheet" href="/css/override.css?t=2020-05-12%2015%3a12%3a21.1905851%20-0400%20EDT%20m%3d%2b0.152549701">
     
 
 
@@ -181,6 +183,7 @@
                 
 
 
+<p>I had some requests regarding how I scraped the atptour.com’s past statistics on player rankings, so I thought I’d post the raw code and eventually turn this into a tutorial for advanced scraping.</p>
 <pre class="r"><code>library(tidyverse)
 library(rvest)
 library(lubridate)

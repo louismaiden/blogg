@@ -17,7 +17,8 @@
       <pubDate>Tue, 12 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/blog/atp-world-tour-website-scraping/</guid>
-      <description>library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +theme(axis.title.y = element_text(angle = 0)))dates &amp;lt;- read_csv(&amp;quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&amp;quot;, col_names = FALSE) %&amp;gt;% select(date = 1) %&amp;gt;% mutate(date = dmy(date),year = year(date)) %&amp;gt;% filter(date &amp;gt;= &amp;quot;1970-01-01&amp;quot; &amp;amp; date &amp;lt; &amp;quot;1978-02-05&amp;quot;) %&amp;gt;% select(-year) %&amp;gt;% mutate(date = as.character(date),date = date %&amp;gt;% str_replace_all(&amp;quot;\\-&amp;quot;,&amp;quot;\\.&amp;quot;)) %&amp;gt;% pull()counter &amp;lt;- 0df_main &amp;lt;- tibble()for (date in dates) {print(as.character(date))print(paste0((100*(counter / length(dates))),&amp;quot;% Finished&amp;quot;))link &amp;lt;- paste0(&amp;quot;https://www.</description>
+      <description>I had some requests regarding how I scraped the atptour.com’s past statistics on player rankings, so I thought I’d post the raw code and eventually turn this into a tutorial for advanced scraping.
+library(tidyverse)library(rvest)library(lubridate)library(hrbrthemes)library(ggthemes)theme_set(theme_ipsum_rc() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +theme(axis.title.y = element_text(angle = 0)))dates &amp;lt;- read_csv(&amp;quot;C:/Users/nyulo/Documents/HBS/LM/atp_dates.csv&amp;quot;, col_names = FALSE) %&amp;gt;% select(date = 1) %&amp;gt;% mutate(date = dmy(date),year = year(date)) %&amp;gt;% filter(date &amp;gt;= &amp;quot;1970-01-01&amp;quot; &amp;amp; date &amp;lt; &amp;quot;1978-02-05&amp;quot;) %&amp;gt;% select(-year) %&amp;gt;% mutate(date = as.</description>
     </item>
     
     <item>
@@ -87,7 +88,7 @@ share: 0.4605444800&#34;,&#34;year: 2000.380</description>
       <description>{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Song Valence By Release Year&#34;},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Valence&#34;},&#34;type&#34;:&#34;linear&#34;,&#34;max&#34;:1},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;label&#34;:{&#34;enabled&#34;:false},&#34;turboThreshold&#34;:0,&#34;showInLegend&#34;:false},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;scatter&#34;:{&#34;marker&#34;:{&#34;symbol&#34;:&#34;circle&#34;}}},&#34;series&#34;:[{&#34;group&#34;:&#34;group&#34;,&#34;data&#34;:[{&#34;track_name&#34;:&#34;El Paso&#34;,&#34;artist_name&#34;:&#34;Marty Robbins&#34;,&#34;album_name&#34;:&#34;Gunfighter Ballads And Trail Songs&#34;,&#34;valence&#34;:0.691,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Marty Robbins
 Track: El Paso
 Album: Gunfighter Ballads And Trail Songs
-Valence: 0.691&#34;,&#34;x&#34;:1959.8286583852,&#34;y&#34;:0.69118317173589},{&#34;track_name&#34;:&#34;Running Bear&#34;</description>
+Valence: 0.691&#34;,&#34;x&#34;:1960.13208876355,&#34;y&#34;:0.691078281591646},{&#34;track_name&#34;:&#34;Running Bear&#34;</description>
     </item>
     
     <item>
@@ -99,7 +100,7 @@ Valence: 0.691&#34;,&#34;x&#34;:1959.8286583852,&#34;y&#34;:0.69118317173589},{&
       <description>{&#34;x&#34;:{&#34;hc_opts&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Song Valence By Release Year&#34;},&#34;yAxis&#34;:{&#34;title&#34;:{&#34;text&#34;:&#34;Valence&#34;},&#34;type&#34;:&#34;linear&#34;,&#34;max&#34;:1},&#34;credits&#34;:{&#34;enabled&#34;:false},&#34;exporting&#34;:{&#34;enabled&#34;:false},&#34;plotOptions&#34;:{&#34;series&#34;:{&#34;label&#34;:{&#34;enabled&#34;:false},&#34;turboThreshold&#34;:0,&#34;showInLegend&#34;:false},&#34;treemap&#34;:{&#34;layoutAlgorithm&#34;:&#34;squarified&#34;},&#34;scatter&#34;:{&#34;marker&#34;:{&#34;symbol&#34;:&#34;circle&#34;}}},&#34;series&#34;:[{&#34;group&#34;:&#34;group&#34;,&#34;data&#34;:[{&#34;track_name&#34;:&#34;El Paso&#34;,&#34;artist_name&#34;:&#34;Marty Robbins&#34;,&#34;album_name&#34;:&#34;Gunfighter Ballads And Trail Songs&#34;,&#34;valence&#34;:0.691,&#34;release_year&#34;:1960,&#34;decade&#34;:1960,&#34;tooltip&#34;:&#34;Artist: Marty Robbins
 Track: El Paso
 Album: Gunfighter Ballads And Trail Songs
-Valence: 0.691&#34;,&#34;x&#34;:1960.03049729047,&#34;y&#34;:0.690809863787424},{&#34;track_name&#34;:&#34;Running Bear&#34;</description>
+Valence: 0.691&#34;,&#34;x&#34;:1959.91982769761,&#34;y&#34;:0.690949838941544},{&#34;track_name&#34;:&#34;Running Bear&#34;</description>
     </item>
     
     <item>

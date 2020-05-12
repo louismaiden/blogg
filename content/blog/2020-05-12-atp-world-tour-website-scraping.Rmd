@@ -7,6 +7,8 @@ categories: []
 tags: []
 ---
 
+I had some requests regarding how I scraped the atptour.com's past statistics on player rankings, so I thought I'd post the raw code and eventually turn this into a tutorial for advanced scraping.
+
 
 ```{r, eval = FALSE, echo = TRUE}
 
