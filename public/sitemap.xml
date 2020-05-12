@@ -3,91 +3,91 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/</loc>
+    <loc>/louismaiden/blogg/</loc>
     <lastmod>2020-05-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/</loc>
+    <loc>/louismaiden/blogg/post/</loc>
     <lastmod>2020-05-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/test-et/</loc>
+    <loc>/louismaiden/blogg/blog/test-et/</loc>
     <lastmod>2020-05-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/test-et/</loc>
+    <loc>/louismaiden/blogg/post/test-et/</loc>
     <lastmod>2020-05-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/tennis-one-handed-backhand/</loc>
+    <loc>/louismaiden/blogg/blog/tennis-one-handed-backhand/</loc>
     <lastmod>2019-05-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/tennis-one-handed-backhand/</loc>
+    <loc>/louismaiden/blogg/post/tennis-one-handed-backhand/</loc>
     <lastmod>2019-05-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/popular-music-is-getting-more-depressing-over-time/</loc>
+    <loc>/louismaiden/blogg/blog/popular-music-is-getting-more-depressing-over-time/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/popular-music-is-getting-more-depressing-over-time/</loc>
+    <loc>/louismaiden/blogg/post/popular-music-is-getting-more-depressing-over-time/</loc>
     <lastmod>2018-10-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/proving-the-central-limit-theorem-using-r/</loc>
+    <loc>/louismaiden/blogg/blog/proving-the-central-limit-theorem-using-r/</loc>
     <lastmod>2018-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/proving-the-central-limit-theorem-using-r/</loc>
+    <loc>/louismaiden/blogg/post/proving-the-central-limit-theorem-using-r/</loc>
     <lastmod>2018-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/new-blog-location/</loc>
+    <loc>/louismaiden/blogg/blog/new-blog-location/</loc>
     <lastmod>2018-02-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/new-blog-location/</loc>
+    <loc>/louismaiden/blogg/post/new-blog-location/</loc>
     <lastmod>2018-02-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/about/</loc>
+    <loc>/louismaiden/blogg/about/</loc>
     <lastmod>2015-08-22T06:42:21-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/</loc>
+    <loc>/louismaiden/blogg/blog/</loc>
     <lastmod>2015-08-22T06:42:21-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/about/colophon/</loc>
+    <loc>/louismaiden/blogg/about/colophon/</loc>
     <lastmod>2015-08-22T06:28:26-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/code/</loc>
+    <loc>/louismaiden/blogg/code/</loc>
     <lastmod>2015-08-19T20:29:37-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/</loc>
+    <loc>/louismaiden/blogg/categories/</loc>
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>/louismaiden/blogg/tags/</loc>
   </url>
   
 </urlset>
