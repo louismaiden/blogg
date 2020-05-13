@@ -19,7 +19,7 @@ library(rgdal)
 ```
 
 
-```{r, warning = FALSE, echo = FALSE, message = FALSE, include = FALSE}
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
 pizza_barstool <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_barstool.csv") %>% 
   mutate(latitude = case_when(name == "La Gusto Pizza" ~ 40.748980,
                                name == "Rubirosa" ~ 40.722752,
@@ -36,14 +36,22 @@ nyc_pizza <- pizza_barstool %>%
 
 
 # ADD MARKERS FOR PIZZA PLACES
+
+# pizzaIcon <- makeIcon(
+#   iconUrl = ifelse(nyc_pizza$review_stats_dave_average_score < 8, "pizza_pic.png", "star_pic.png"),
+#   iconWidth = 38, iconHeight = 55,
+#   iconAnchorX = 12, iconAnchorY = 24
+# )
+
+
 pizzaIcon2 <- makeIcon(
-  iconUrl = "static/img/pizza_pic.png",
+  iconUrl = "C:/Users/nyulo/Documents/R/blogg/static/img/pizza_pic.png",
   iconWidth = 38, iconHeight = 55,
   iconAnchorX = 12, iconAnchorY = 24
 )
 
 starIcon2 <- makeIcon(
-  iconUrl = "static/img/star_pic.png",
+  iconUrl = "C:/Users/nyulo/Documents/R/blogg/static/img/star_pic.png",
   iconWidth = 38, iconHeight = 55,
   iconAnchorX = 12, iconAnchorY = 24
 )
@@ -59,7 +67,7 @@ proj4string(nyc_pizza_spdf) <- proj4string(nyc_neighborhoods)
 matches <- over(nyc_pizza_spdf, nyc_neighborhoods)
 points <- cbind(nyc_pizza, matches) %>% as_tibble()
 
-medians_by_neighborhood <- points %>%
+medians_by_neighborhood <- points %>% 
   group_by(neighborhood) %>%
   summarize(median_score=median(review_stats_dave_average_score), 
             reviews = n())
@@ -91,12 +99,9 @@ less_than_eight <- nyc_pizza %>% filter(review_stats_dave_average_score < 8) %>%
 greater_than_eight <- nyc_pizza %>% filter(review_stats_dave_average_score >= 8) %>% rename(lng = longitude,
                                                                                         lat = latitude)
 
+
+
 nyc_pal <- colorNumeric(c("YlGnBu"), domain  = nyc_neighborhoods@data$median_score)
-
-# previewColors(pal = nyc_pal,
-#               values = c(seq(1,10,1)))
-
-
 
 
 pizza_map <- nyc_neighborhoods %>% 
@@ -128,8 +133,6 @@ pizza_map <- nyc_neighborhoods %>%
 
 ```{r, warning = FALSE, echo = FALSE, message = FALSE}
 pizza_map
-
-#saveWidget(pizza_map, file = "pizza_map.html")
 
 ```
 
