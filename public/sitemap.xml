@@ -3,12 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/blog/</loc>
-    <lastmod>2020-05-12T06:42:21-07:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>/post/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/quantifying-the-impact-of-covid-restaurant-closures-in-new-york-city/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/</loc>
     <lastmod>2020-05-12T06:42:21-07:00</lastmod>
   </url>
   
@@ -29,11 +39,6 @@
   
   <url>
     <loc>/post/tennis-one-handed-backhand/</loc>
-    <lastmod>2019-05-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
     <lastmod>2019-05-07T00:00:00+00:00</lastmod>
   </url>
   
