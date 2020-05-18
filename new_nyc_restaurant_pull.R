@@ -9,7 +9,7 @@ library(googleway)
 
 key1 <- "AIzaSyCpI4_qbUAzmxW8XdMzdKSzH3kOZKk9Q_s"
 
-nyc_zip_names <- c("Financial District", "Battery Park City", "Chelsea")
+#nyc_zip_names <- c("Financial District", "Battery Park City", "Chelsea")
 
 nyc_zip_names <- c("Financial District")
 
@@ -28,24 +28,49 @@ for(zip_name in nyc_zip_names) {
     as_tibble() %>% 
     janitor::clean_names() %>% 
     select(name, business_status, price_level, place_id, rating, types) %>% 
-    mutate(lat = res_base1$results$geometry$location$lat,
-           lng = res_base1$results$geometry$location$lng,
+    mutate(lat = api_result1$results$geometry$location$lat,
+           lng = api_result1$results$geometry$location$lng,
            open = business_status == "OPERATIONAL")
   print("FIRST DF SAVED")
-  
+
   token1 <- api_result1$next_page_token
   print("FIRST TOKEN SAVED")
-  
+
+
+
   # PULL DATA 2
-  api_result2 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"),
-                               page_token = api_result1$next_page_token,
-                               key = key1)
+google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"),
+                               page_token = token1,
+                               key = key1) %>% 
+    .$results %>%  
+}
+
+api_result1
+api_result2
+
+
   print("SECOND API PULLED")
+
+  temp2 <- api_result2 %>% 
+    .$results %>% 
+    as_tibble() %>% 
+    janitor::clean_names() %>% 
+    select(name, business_status, price_level, place_id, rating, types) %>% 
+    mutate(lat = api_result2$results$geometry$location$lat,
+           lng = api_result2$results$geometry$location$lng,
+           open = business_status == "OPERATIONAL")
+  
+  print("SECOND DF SAVED")
+  
 
 }
   
+temp2
 
-api_result2$results
+
+api_result2 %>% 
+  .$results %>% 
+  as_tibble()
 
 
 
