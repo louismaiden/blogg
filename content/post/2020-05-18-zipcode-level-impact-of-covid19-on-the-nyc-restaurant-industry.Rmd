@@ -58,9 +58,12 @@ for(zip_name in nyc_zip_names) {
 
   
   shell <- bind_rows(shell, temp1)
+
+  
   
 }
 ```
+
 
 
 ```{r results='asis', echo=FALSE, include=FALSE}
