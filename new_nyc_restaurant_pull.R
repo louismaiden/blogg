@@ -1,14 +1,6 @@
----
-title: Quantifying the Impact of COVID Restaurant Closures in New York City
-author: Louis Maiden
-date: '2020-05-16'
-slug: quantifying-the-impact-of-covid-restaurant-closures-in-new-york-city
-categories: []
-tags: []
----
 
-
-```{r results='asis', echo=FALSE, include=FALSE}
+  
+  
 library(tidyverse)
 library(leaflet)
 library(tigris)
@@ -16,10 +8,77 @@ library(googleway)
 # #1
 
 key1 <- "AIzaSyCpI4_qbUAzmxW8XdMzdKSzH3kOZKk9Q_s"
-# PULL DATA 1
-res_base1 <- google_places(search_string = "Restaurants in Manhattan, New York",
-                          key = key1)
 
+nyc_zip_names <- c("Financial District", "Battery Park City", "Chelsea")
+
+nyc_zip_names <- c("Financial District")
+
+shell <- tibble()
+
+for(zip_name in nyc_zip_names) {
+  
+  print(zip_name)
+
+# PULL DATA 1
+  api_result1 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"), key = key1)
+  print("FIRST API PULLED")
+  
+  temp1 <- api_result1 %>% 
+    .$results %>% 
+    as_tibble() %>% 
+    janitor::clean_names() %>% 
+    select(name, business_status, price_level, place_id, rating, types) %>% 
+    mutate(lat = res_base1$results$geometry$location$lat,
+           lng = res_base1$results$geometry$location$lng,
+           open = business_status == "OPERATIONAL")
+  print("FIRST DF SAVED")
+  
+  token1 <- api_result1$next_page_token
+  print("FIRST TOKEN SAVED")
+  
+  # PULL DATA 2
+  api_result2 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"),
+                               page_token = api_result1$next_page_token,
+                               key = key1)
+  print("SECOND API PULLED")
+
+}
+  
+
+api_result2$results
+
+
+
+
+  token2 <- api_result2$next_page_token
+  print("THIRD TOKEN SAVED")
+  
+  
+  
+  # # PULL DATA 3
+  # api_result3 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"),
+  #                              page_token = token2,
+  #                              key = key1)
+  # temp3 <- api_result3 %>% 
+  #   .$results %>% 
+  #   as_tibble() %>% 
+  #   janitor::clean_names() %>% 
+  #   select(name, business_status, price_level, place_id, rating, types) %>% 
+  #   mutate(lat = res_base1$results$geometry$location$lat,
+  #          lng = res_base1$results$geometry$location$lng,
+  #          open = business_status == "OPERATIONAL")
+  
+
+
+shell <- bind_rows(shell, temp1, temp2, temp3)
+
+}
+
+shell
+
+google_places(search_string = paste0("Restaurants in", "Financial District", "New York"), key = key1)
+
+temp
 # CONVERT TO DF
 base_df1 <- res_base1$results %>% 
   as_tibble() %>% 
@@ -28,6 +87,8 @@ base_df1 <- res_base1$results %>%
   mutate(lat = res_base1$results$geometry$location$lat,
          lng = res_base1$results$geometry$location$lng,
          open = business_status == "OPERATIONAL")
+
+}
 
 # SAVE NEXT TOKEN
 token1 <- res_base1$next_page_token
@@ -106,8 +167,8 @@ avgs_by_neighborhood <- points %>%
   group_by(neighborhood) %>% 
   summarize(closure_rate = mean(closed),
             n = n())
-  
-  
+
+
 
 map_data <- geo_join(nyc_neighborhoods, avgs_by_neighborhood, "neighborhood", "neighborhood")
 
@@ -132,10 +193,7 @@ closure_map <- nyc_neighborhoods %>%
               popup = ~paste0("<b>", neighborhood, "</b>", "<br>",
                               "Closure Rate: ", closure_rate, "<br>",
                               "Neighborhood Sample Size: ", n))
-```
 
 
-```{r, warning = FALSE, echo = FALSE, message = FALSE}
 closure_map
 
-```
