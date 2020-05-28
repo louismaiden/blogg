@@ -1,0 +1,35 @@
+---
+title: Quantifying the Impact of NYC Restaurant Closures
+author: ''
+date: '2020-05-27'
+slug: quantifying-the-impact-of-nyc-restaurant-closures
+categories: []
+tags: []
+---
+
+```{r results='asis', echo=FALSE, include=FALSE}
+
+library(tidyverse)
+library(leaflet)
+library(leaflet.extras)
+library(htmlwidgets)
+library(broom)
+library(httr)
+library(tigris)
+library(rgdal)
+library(googleway)
+
+```
+
+```{r, echo = FALSE}
+
+bound <- read_csv("C:/Users/nyulo/Documents/R/blogg/data/nyc_restaurant_closures/2020_05_26_nyc_restaurant_closures_bound.csv")
+
+```
+
+
+```{r}
+
+head(bound)
+
+```

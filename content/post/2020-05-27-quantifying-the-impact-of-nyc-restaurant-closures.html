@@ -1,0 +1,39 @@
+---
+title: Quantifying the Impact of NYC Restaurant Closures
+author: ''
+date: '2020-05-27'
+slug: quantifying-the-impact-of-nyc-restaurant-closures
+categories: []
+tags: []
+---
+
+
+
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   business_status = col_character(),
+##   price_level = col_integer(),
+##   place_id = col_character(),
+##   rating = col_double(),
+##   types = col_character(),
+##   lat = col_double(),
+##   lng = col_double(),
+##   open = col_logical(),
+##   neighborhood = col_character(),
+##   pull_date = col_date(format = &quot;&quot;),
+##   pull_datetime = col_datetime(format = &quot;&quot;),
+##   pull_week = col_character()
+## )</code></pre>
+<pre class="r"><code>head(bound)</code></pre>
+<pre><code>## # A tibble: 6 x 13
+##   name  business_status price_level place_id rating types   lat   lng open 
+##   &lt;chr&gt; &lt;chr&gt;                 &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
+## 1 Seaw~ OPERATIONAL               2 ChIJhTK~    4.2 &quot;c(\~  40.9 -73.9 TRUE 
+## 2 Guad~ OPERATIONAL               2 ChIJv-b~    4.4 &quot;c(\~  40.9 -73.9 TRUE 
+## 3 Bean~ OPERATIONAL               2 ChIJTan~    4.5 &quot;c(\~  40.9 -73.9 TRUE 
+## 4 RAIC~ OPERATIONAL               2 ChIJ1Uz~    4.2 &quot;c(\~  40.9 -73.9 TRUE 
+## 5 Uniq~ OPERATIONAL              NA ChIJEyA~    4.7 &quot;c(\~  40.9 -73.9 TRUE 
+## 6 Tryo~ OPERATIONAL               2 ChIJ44_~    4.4 &quot;c(\~  40.9 -73.9 TRUE 
+## # ... with 4 more variables: neighborhood &lt;chr&gt;, pull_date &lt;date&gt;,
+## #   pull_datetime &lt;dttm&gt;, pull_week &lt;chr&gt;</code></pre>
