@@ -21,38 +21,51 @@ library(taskscheduleR)
 
 key1 <- "AIzaSyCpI4_qbUAzmxW8XdMzdKSzH3kOZKk9Q_s"
 
- nyc_zip_names <- c("Inwood",
-   "Washington Heights",
-   "Harlem",
-   "Morningside Heights",
-   "East Harlem",
-   "Upper West Side",
-   "Upper East Side",
-   "Hell's Kitchen",
-   "Theater District",
-   "Midtown",
-   "Murray Hill",
-   "Chelsea",
-   "Flatiron District",
-   "Kips Bay",
-   "Gramercy",
-   "Stuyvesant Town",
-   "West Village",
-   "Greenwich Village",
-   "NoHo",
-   "East Village",
-   "SoHo",
-   "Nolita",
-   "Lower East Side",
-   "Little Italy",
-   "Tribeca",
-   "Chinatown",
-   "Civic Center",
-   "Two Bridges",
-   "Battery Park City",
-   "Financial District",)
+ nyc_zip_names <- c("Inwood,New York",
+   "Washington Heights,New York",
+   "Harlem,New York",
+   "Morningside Heights,New York",
+   "East Harlem,New York",
+   "Upper West Side,New York",
+   "Upper East Side,New York",
+   "Hell's Kitchen,New York",
+   "Theater District,New York",
+   "Midtown,New York",
+   "Murray Hill,New York",
+   "Chelsea,New York",
+   "Flatiron District,New York",
+   "Kips Bay,New York",
+   "Gramercy,New York",
+   "Stuyvesant Town,New York",
+   "West Village,New York",
+   "Greenwich Village,New York",
+   "NoHo,New York",
+   "East Village,New York",
+   "SoHo,New York",
+   "Nolita,New York",
+   "Lower East Side,New York",
+   "Little Italy,New York",
+   "Tribeca,New York",
+   "Chinatown,New York",
+   "Civic Center,New York",
+   "Two Bridges,New York",
+   "Battery Park City,New York",
+   "Financial District,New York")
 
  
+ # GRAPH
+ r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+ nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+ 
+ 
+time_begin - Sys.time()
+ 
+ nyc_zip_names <- nyc_neighborhoods@data %>% as_tibble() %>% 
+   mutate(zip = paste0(neighborhood, ", ", borough)) %>% 
+   unique() %>% 
+   pull(zip)
+ 
+
 shell <- tibble()  
 
 for(zip_name in nyc_zip_names) {
@@ -62,7 +75,7 @@ for(zip_name in nyc_zip_names) {
   zip_name <- print(zip_name)
   
   # PULL DATA 1
-  api_result1 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"), key = key1)
+  api_result1 <- google_places(search_string = paste0("Restaurants in ", nyc_zip_names, ", ", ",New York"), key = key1)
   print("FIRST API PULLED")
   print(paste0(api_result1$results %>% names(), "ARE THE NAMES IN DF1"))  
   
@@ -86,7 +99,7 @@ for(zip_name in nyc_zip_names) {
   Sys.sleep(3)
 
   # PULL DATA 2
-api_result2 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"), page_token = token1, key = key1)
+api_result2 <- google_places(search_string = paste0("Restaurants in ", nyc_zip_names, ", ", ",New York"), page_token = token1, key = key1)
 print("SECOND API PULLED")
 print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
 
@@ -108,7 +121,7 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
   Sys.sleep(3)
   
   # PULL DATA 2
-  api_result3 <- google_places(search_string = paste0("Restaurants in ", zip_name, ",New York"), page_token = token2, key = key1)
+  api_result3 <- google_places(search_string = paste0("Restaurants in ", nyc_zip_names, ", ", ",New York"), page_token = token2, key = key1)
   print("THIRD API PULLED")
   print(paste0(api_result3$results %>% names(), "ARE THE NAMES IN DF3"))
   
@@ -135,16 +148,23 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
   
 }
 
+time_end <- Sys.time()
+
 nyc_restaurants <- shell %>% 
   mutate(types = as.character(types),
          pull_date = Sys.Date(),
          pull_datetime = Sys.time(), 
          pull_week = lubridate::week(pull_date)) %>% 
-    as_tibble()
+    as_tibble() %>% 
+  rename(old_neighborhood = neighborhood) %>% 
+  separate(old_neighborhood, c("neighborhood", "borough"), sep = ",", remove = TRUE)
 
 date_pulled <- nyc_restaurants %>% slice(1) %>% mutate(pull_date = str_replace_all(pull_date, "-", "_")) %>% pull(pull_date)
 
-write_csv(nyc_restaurants, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_restaurant_closures.csv"))
+write_csv(nyc_restaurants, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_full.csv"))
+
+
+#write_csv(nyc_restaurants, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_restaurant_closures.csv"))
 
 
 # BIND INDIVIDUAL FILES
@@ -164,6 +184,14 @@ bound %>% count(pull_date)
 # GRAPH
 r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
 nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+
+
+nyc_zip_names <- nyc_neighborhoods@data %>% as_tibble() %>% 
+  mutate(zip = paste0("Restaurants in ",neighborhood, ", ", borough, ", New York")) %>% 
+  pull(zip) %>% 
+  unique()
+
+
 
 # nyc_restaurants <- shell
 # coordinates(nyc_restaurants) <- ~lng + lat
