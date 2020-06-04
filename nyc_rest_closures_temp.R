@@ -96,8 +96,8 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
     as_tibble() %>% 
     janitor::clean_names() %>% 
     select(name, business_status, price_level, place_id, rating, types) %>% 
-    mutate(lat = api_result1$results$geometry$location$lat,
-           lng = api_result1$results$geometry$location$lng,
+    mutate(lat = api_result2$results$geometry$location$lat,
+           lng = api_result2$results$geometry$location$lng,
            open = business_status == "OPERATIONAL",
            neighborhood = zip_name)
   print("SECOND DF SAVED")
@@ -118,8 +118,8 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
     as_tibble() %>% 
     janitor::clean_names() %>%
     select(name, business_status, price_level, place_id, rating, types) %>% 
-    mutate(lat = api_result1$results$geometry$location$lat,
-           lng = api_result1$results$geometry$location$lng,
+    mutate(lat = api_result3$results$geometry$location$lat,
+           lng = api_result3$results$geometry$location$lng,
            open = business_status == "OPERATIONAL",
            neighborhood = zip_name)
   print("THIRD DF SAVED")
