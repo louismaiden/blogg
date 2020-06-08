@@ -27,7 +27,7 @@ key1 <- "AIzaSyCpI4_qbUAzmxW8XdMzdKSzH3kOZKk9Q_s"
  nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
  
  
-time_begin - Sys.time()
+time_begin <- Sys.time()
 
  nyc_zip_names <- nyc_neighborhoods@data %>%
    as_tibble() %>% 
@@ -55,7 +55,7 @@ for(zip_name in nyc_zip_names) {
     as_tibble() %>% 
     janitor::clean_names() %>%
     mutate(opening_hours = as.character(opening_hours)) %>% 
-    select(name, business_status, price_level, place_id, rating, types) %>%
+    select(name, business_status, price_level, place_id, starts_with("rat"), types) %>%
     mutate(lat = api_result1$results$geometry$location$lat,
            lng = api_result1$results$geometry$location$lng,
            open = business_status == "OPERATIONAL",
@@ -78,7 +78,7 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
     .$results %>% 
     as_tibble() %>% 
     janitor::clean_names() %>% 
-    select(name, business_status, price_level, place_id, rating, types) %>% 
+    select(name, business_status, price_level, place_id, starts_with("rat"), types) %>%
     mutate(lat = api_result2$results$geometry$location$lat,
            lng = api_result2$results$geometry$location$lng,
            open = business_status == "OPERATIONAL",
@@ -100,7 +100,7 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
     .$results %>% 
     as_tibble() %>% 
     janitor::clean_names() %>%
-    select(name, business_status, price_level, place_id, rating, types) %>% 
+    select(name, business_status, price_level, place_id, starts_with("rat"), types) %>%
     mutate(lat = api_result3$results$geometry$location$lat,
            lng = api_result3$results$geometry$location$lng,
            open = business_status == "OPERATIONAL",
@@ -120,6 +120,8 @@ print(paste0(api_result2$results %>% names(), "ARE THE NAMES IN DF2"))
 
 time_end <- Sys.time()
 
+time_begin - time_end
+
 nyc_restaurants <- shell %>% 
   mutate(types = as.character(types),
          pull_date = Sys.Date(),
@@ -127,7 +129,7 @@ nyc_restaurants <- shell %>%
          pull_week = lubridate::week(pull_date)) %>% 
     as_tibble() %>% 
   rename(old_neighborhood = neighborhood) %>% 
-  separate(old_neighborhood, c("neighborhood", "borough"), sep = ",", remove = TRUE)
+  separate(old_neighborhood, c("neighborhood", "borough"), sep = ",", remove = FALSE)
 
 date_pulled <- nyc_restaurants %>% slice(1) %>% mutate(pull_date = str_replace_all(pull_date, "-", "_")) %>% pull(pull_date)
 
@@ -140,13 +142,24 @@ write_csv(nyc_restaurants, paste0("./data/nyc_restaurant_closures/",date_pulled,
 # BIND INDIVIDUAL FILES
 files <- list.files("C:/Users/nyulo/Documents/R/blogg/data/nyc_restaurant_closures/", full.names = TRUE) %>% 
           as_tibble() %>% 
+          filter(str_detect(value, "_full")) %>% 
           filter(!str_detect(value, "_bound")) %>% 
-  pull()
+    pull()
 
-bound <- files %>% 
-  map_df(read_csv)
+bound <- files %>%
+  map_df(~read_csv(.) %>% 
+           map(as.character)) %>% 
+  mutate(price_level = price_level %>% as.integer,
+         rating = rating %>% as.numeric,
+         open = open %>% as.logical(),
+         pull_date = pull_date %>% lubridate::ymd()
+         ) %>% 
+  mutate(old_neighborhood = paste0(neighborhood, ", ", borough)) %>% 
+  mutate(old_neighborhood = case_when(old_neighborhood == "Bay Terrace, Staten Island, Staten Island" ~ "Bay Terrace, Staten Island",
+                                      old_neighborhood == "Chelsea, Staten Island, Staten Island" ~ "Chelsea, Staten Island",
+                                      TRUE ~ old_neighborhood)) 
 
-write_csv(bound, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_restaurant_closures_bound.csv"))
+write_csv(bound, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_full_bound.csv"))
 
 
 bound %>% count(pull_date)
