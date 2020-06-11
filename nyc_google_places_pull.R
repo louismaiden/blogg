@@ -124,8 +124,8 @@ time_begin - time_end
 
 nyc_restaurants <- shell %>% 
   mutate(types = as.character(types),
-         pull_date = Sys.Date() - 1,
-         pull_datetime = Sys.time() - 86400, 
+         pull_date = Sys.Date(),
+         pull_datetime = Sys.time(), 
          pull_week = lubridate::week(pull_date)) %>% 
     as_tibble() %>% 
   rename(old_neighborhood = neighborhood) %>% 
