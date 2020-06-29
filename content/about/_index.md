@@ -9,4 +9,4 @@ Louis Maiden is a researcher at Harvard Business School under William Kerr and R
 
 Personal interests include economic development, political economy, public policy, econometrics, machine learnings, statistical computing, skateboarding, music, tennis, Paris, pizza, and so on.
 
-Reachable at lmaiden@hbs.edu.
+Reachable at louismaiden@gmail.com.
