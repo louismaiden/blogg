@@ -144,6 +144,7 @@ files <- list.files("C:/Users/nyulo/Documents/R/blogg/data/nyc_restaurant_closur
           as_tibble() %>% 
           filter(str_detect(value, "_full")) %>% 
           filter(!str_detect(value, "_bound")) %>% 
+          filter(!str_detect(value, "2020_06_01")) %>% 
     pull()
 
 bound <- files %>%
@@ -160,95 +161,3 @@ bound <- files %>%
                                       TRUE ~ old_neighborhood)) 
 
 write_csv(bound, paste0("./data/nyc_restaurant_closures/",date_pulled, "_nyc_full_bound.csv"))
-
-
-bound %>% count(pull_date)
-  
-# GRAPH
-r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
-nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
-
-
-nyc_zip_names <- nyc_neighborhoods@data %>% as_tibble() %>% 
-  mutate(zip = paste0("Restaurants in ",neighborhood, ", ", borough, ", New York")) %>% 
-  pull(zip) %>% 
-  unique()
-
-
-
-# nyc_restaurants <- shell
-# coordinates(nyc_restaurants) <- ~lng + lat
-# proj4string(nyc_restaurants) <- proj4string(nyc_neighborhoods)
-# matches <- over(nyc_restaurants, nyc_neighborhoods)
-# points <- cbind(shell, matches) %>% as_tibble()
-
-
-oldest_pull <- bound %>%
-  filter(pull_date == min(pull_date)) %>%
-  mutate(closed = business_status == "CLOSED_TEMPORARILY") %>% 
-  group_by(neighborhood) %>%
-  summarize(closure_rate = mean(closed),
-            pull_date = max(pull_date),
-            n = n())
-
-
-changes <- bound %>% 
-  filter(pull_date == max(pull_date)) %>% 
-  mutate(closed = business_status == "CLOSED_TEMPORARILY") %>%
-  group_by(neighborhood) %>% 
-  summarize(closure_rate = mean(closed),
-            pull_date = max(pull_date),
-            n = n()) %>% 
-  ungroup() %>% 
-  bind_rows(oldest_pull) %>% 
-  arrange(neighborhood, pull_date) %>%
-  group_by(neighborhood) %>% 
-  mutate(change = closure_rate - lag(closure_rate),
-         change = change * 100) %>%
-  ungroup() %>% 
-  filter(!is.na(change)) %>% 
-  select(neighborhood, max_date = pull_date, change)
-
-
-# points <- points %>%
-#   group_by(neighborhood) %>%
-#   mutate(n = n()) %>%
-#   ungroup() %>%
-#   filter(n >= 10)
-
-
-map_data <- geo_join(nyc_neighborhoods, oldest_pull, "neighborhood", "neighborhood")
-map_data_change <- geo_join(nyc_neighborhoods, changes, "neighborhood", "neighborhood")
-
-# nyc_neighborhoods@data <- nyc_neighborhoods@data %>% as_tibble() %>%
-#   inner_join(points %>% select(name, business_status, neighborhood)) %>%
-#   select(name, neighborhood, everything()) %>%
-#   mutate(closed = business_status == "CLOSED_TEMPORARILY") %>%
-#   group_by(neighborhood) %>%
-#   mutate(closure_rate = mean(closed),
-#          sample_size = n()) %>%
-#   ungroup()
-
-closure_pal <- colorNumeric(c("Reds"), domain  = oldest_pull$closure_rate)
-closure_pal_change <- colorNumeric(c("RdBu"), domain  = changes$change + 1.5 %>% sqrt())
-
-
-covid_map <- nyc_neighborhoods %>%
-  leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addPolygons(data = map_data, weight = 2, fillOpacity = .4,
-              group = "Base",
-              color = ~closure_pal(closure_rate),
-              popup = ~paste0("<b>", neighborhood, "</b>", "<br>",
-                              "Closure Rate: ", paste0(round(closure_rate, 2), "%"), "<br>",
-                              "Neighborhood Sample Size: ", n)) %>%
-  addPolygons(data = map_data_change, weight = 2, fillOpacity = .4,
-              group = "Change",
-              color = ~closure_pal_change(change),
-              popup = ~paste0("<b>", neighborhood, "</b>", "<br>",
-                              "Change in Closure Rate: ", paste0(round(change, 2), "%"), "<br>")) %>%
-  addLayersControl(overlayGroups = c("Base", "Change")) %>% 
-  setView(-73.9840, 40.7549, zoom = 11)
-
-
-htmlwidgets::saveWidget(covid_map, file = "covid_map.html")
