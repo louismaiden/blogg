@@ -4,27 +4,22 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-05-27T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/new-post-test/</loc>
+    <lastmod>2020-09-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/new-post-test/</loc>
+    <lastmod>2020-09-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2020-05-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/blog/quantifying-the-impact-of-nyc-restaurant-closures/</loc>
-    <lastmod>2020-05-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/quantifying-the-impact-of-nyc-restaurant-closures/</loc>
-    <lastmod>2020-05-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/zipcode-level-impact-of-covid19-on-the-nyc-restaurant-industry/</loc>
-    <lastmod>2020-05-18T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -34,11 +29,6 @@
   
   <url>
     <loc>/blog/atp-world-tour-website-scraping/</loc>
-    <lastmod>2020-05-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/blog/mapping-bartool-s-top-pizza-joints-in-nyc/</loc>
     <lastmod>2020-05-12T00:00:00+00:00</lastmod>
   </url>
   
